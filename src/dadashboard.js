@@ -15,11 +15,10 @@ import GetTokenBlock from './SubComponents/getappcredentials';
 import { GlobalNav, Dropdown, Checkbox, TextField } from 'hig-react';
 
 type Props = {
-    name: string,
     module: string,
     submodule: string,
+    appData : Object,
     gotoPlayground: Function,
-    token: String
 };
 
 const modules = [
@@ -120,24 +119,20 @@ class DADashboard extends Component<Props> {
         }
     };
 
-    handleSubmoduleClick = id => {
-        console.log(`submodule click ${id}`);
-    };
-
-    handleModuleClick = id => {
-        console.log(`module click ${id}`);
-    };
-
     static getDerivedStateFromProps(props, current_state) {
         return {
             token : props.token,
             needLoading : true,
+            applicationKeys : props.appData.apps.map(function (app,id) {
+                return {
+                    label: app.name,
+                    id : id.toString()
+                };
+            })
         };
     }
-
     render() {
-        console.log("DashBoard Module");
-        console.log(this.props.module);
+        console.log(this.state.applicationKeys);
         return (
             <GlobalNav  modules={modules}
                         submodules={submodules}
@@ -154,10 +149,7 @@ class DADashboard extends Component<Props> {
                             projectAccountSwitcher: {
                                 projectTitle : 'Application Keys',
                                 accountTitles : 'Accounts',
-                                projects: [
-                                    { label: 'Application Key 1',  id: 'p1' },
-                                    { label: 'Application Key 2', id: 'p2' }
-                                ]/*,
+                                projects: this.state.applicationKeys/*,
                                 accounts: [
                                     { label: 'My User Account', id: 'a1' }
                                 ]*/

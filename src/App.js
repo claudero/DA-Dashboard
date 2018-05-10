@@ -63,9 +63,9 @@ class App extends Component<Props> {
                 {
                     this.props.module !== 'ReferencePlayground' &&
                     <DADashboard
-                        name="Design Automation Dashboard"
                         module={this.props.module}
                         submodule={this.props.submodule}
+                        appData={myApplicationData}
                         gotoPlayground={ () => this.gotoPlayground()}
                     />
                 }
