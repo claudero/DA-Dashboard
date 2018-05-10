@@ -1,0 +1,309 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots UI MockUp Error 1`] = `
+<div
+  className="container"
+>
+  <div
+    className="panel panel-default"
+    id={undefined}
+  >
+    <div
+      className="panel-body"
+    >
+      <div
+        className="row"
+      >
+        <strong
+          style={
+            Object {
+              "float": "left",
+              "padding-left": "15px",
+            }
+          }
+        >
+          Scene Unwrap
+        </strong>
+      </div>
+      <div
+        className="row"
+      >
+        <strong
+          style={
+            Object {
+              "font-size": "12px",
+              "padding-left": "15px",
+            }
+          }
+        >
+          <span>
+            Error loading application
+          </span>
+        </strong>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots UI MockUp Not Logged in 1`] = `
+<div
+  className="container"
+>
+  <div
+    className="panel panel-default"
+    id={undefined}
+  >
+    <div
+      className="panel-body"
+    >
+      <div
+        className="row"
+      >
+        <strong
+          style={
+            Object {
+              "float": "left",
+              "padding-left": "15px",
+            }
+          }
+        >
+          Scene Unwrap
+        </strong>
+      </div>
+      <div
+        className="row"
+      >
+        <strong
+          style={
+            Object {
+              "font-size": "12px",
+              "padding-left": "15px",
+            }
+          }
+        >
+          <span>
+            Please sign-in to use the service
+          </span>
+        </strong>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots UI MockUp Ready to Unwrap 1`] = `
+<div
+  className="container"
+>
+  <div
+    className="panel panel-default"
+    id={undefined}
+  >
+    <div
+      className="panel-body"
+    >
+      <div
+        className="row"
+      >
+        <strong
+          style={
+            Object {
+              "float": "left",
+              "padding-left": "15px",
+            }
+          }
+        >
+          Scene Unwrap
+        </strong>
+      </div>
+      <div
+        className="row"
+      >
+        <strong
+          style={
+            Object {
+              "font-size": "12px",
+              "padding-left": "15px",
+            }
+          }
+        >
+          <span>
+            <button
+              className="btn btn-default"
+              disabled={false}
+              onClick={[Function]}
+              type="button"
+            >
+              Unwrap all objects
+            </button>
+          </span>
+        </strong>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots UI MockUp Results Applied 1`] = `
+<div
+  className="container"
+>
+  <div
+    className="panel panel-default"
+    id={undefined}
+  >
+    <div
+      className="panel-body"
+    >
+      <div
+        className="row"
+      >
+        <strong
+          style={
+            Object {
+              "float": "left",
+              "padding-left": "15px",
+            }
+          }
+        >
+          Scene Unwrap
+        </strong>
+      </div>
+      <div
+        className="row"
+      >
+        <strong
+          style={
+            Object {
+              "font-size": "12px",
+              "padding-left": "15px",
+            }
+          }
+        >
+          <span>
+            Results Applied
+            <button
+              className="btn btn-default"
+              disabled={false}
+              onClick={[Function]}
+              type="button"
+            >
+              Ok
+            </button>
+          </span>
+        </strong>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots UI MockUp Unwrap complete 1`] = `
+<div
+  className="container"
+>
+  <div
+    className="panel panel-default"
+    id={undefined}
+  >
+    <div
+      className="panel-body"
+    >
+      <div
+        className="row"
+      >
+        <strong
+          style={
+            Object {
+              "float": "left",
+              "padding-left": "15px",
+            }
+          }
+        >
+          Scene Unwrap
+        </strong>
+      </div>
+      <div
+        className="row"
+      >
+        <strong
+          style={
+            Object {
+              "font-size": "12px",
+              "padding-left": "15px",
+            }
+          }
+        >
+          <span>
+            Unwrap complete
+            <br />
+            <button
+              className="btn btn-default"
+              disabled={false}
+              onClick={[Function]}
+              type="button"
+            >
+              Apply Results
+            </button>
+            <button
+              className="btn btn-default"
+              disabled={false}
+              onClick={[Function]}
+              type="button"
+            >
+              Cancel
+            </button>
+          </span>
+        </strong>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots UI MockUp Unwrap in progress 1`] = `
+<div
+  className="container"
+>
+  <div
+    className="panel panel-default"
+    id={undefined}
+  >
+    <div
+      className="panel-body"
+    >
+      <div
+        className="row"
+      >
+        <strong
+          style={
+            Object {
+              "float": "left",
+              "padding-left": "15px",
+            }
+          }
+        >
+          Scene Unwrap
+        </strong>
+      </div>
+      <div
+        className="row"
+      >
+        <strong
+          style={
+            Object {
+              "font-size": "12px",
+              "padding-left": "15px",
+            }
+          }
+        >
+          <span>
+            Unwrap in progress...
+          </span>
+        </strong>
+      </div>
+    </div>
+  </div>
+</div>
+`;

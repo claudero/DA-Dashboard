@@ -1,0 +1,68 @@
+/*
+Style for all containers
+Mostly overrides for Bootstrap
+ */
+
+@import "colors.scss";
+
+body {
+    background-color: color('background');
+
+    .container {
+        margin: 0;
+        padding: 0;
+        background: none;
+        border: none;
+    }
+
+    .modal-content {
+        background-color: color('background', 'light');
+
+        .modal-header {
+            color: color('text');
+            border-bottom-color: color('background', 'dark');
+        }
+
+        .modal-footer {
+            border-top-color: color('background');
+        }
+    }
+
+    &::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+        background-color: color('scrollbar', 'background');
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: color('scrollbar', 'thumb');
+        outline: 1px solid slategrey;
+    }
+}
+
+.row {
+    margin: 0;
+}
+
+.panel {
+    min-width: 365px;
+    background-color: color('background');
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.progress-container {
+
+    .progress-numbers {
+        text-align: center;
+        margin-top: -12px;
+        position: relative;
+
+        span {
+            background: linear-gradient(to right, rgba(color('background'),0) 1%,rgba(color('background'), 0.9) 50%,rgba(color('background'),0) 100%);
+            padding: 5px 50px;
+            color: color('text');
+        }
+    }
+}

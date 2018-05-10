@@ -1,0 +1,88 @@
+/*
+Style for all texts
+Mostly overrides for Bootstrap
+ */
+
+@import 'colors.scss';
+
+body {
+    h1 {
+        font-size: 20px;
+    }
+
+    p {
+        font-size: 12px;
+    }
+
+    .hig__typography {
+        color: color('text');
+        margin-bottom: 10px;
+    }
+
+    .detail-text {
+        margin-top: -5px;
+        color: color('text', 'grey');
+    }
+
+    .success {
+        color: $success;
+    }
+
+    .error {
+        color: $error;
+    }
+
+    .warning {
+        color: $warning;
+    }
+
+    .hig__progress-ring {
+        display: none;
+        padding: 0 5px 5px;
+        top: 7px;
+
+        &.hig__progress-ring--entered {
+            display: inline-block;
+        }
+
+        .hig__progress-ring__background {
+            fill: color('background', 'dark');
+
+        }
+
+        .hig__progress-ring__mask {
+            fill: color('background');
+        }
+    }
+    
+    .glyphicon {
+        padding: 0 5px;
+
+        &.loading {
+            animation:spin 2s linear infinite;
+        }
+        @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+        @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+        @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+    }
+
+    .stats-file {
+        padding: 6px 9px;
+        margin-top: 5px;
+        color: color('text');
+        background-color: color('background', 'dark');
+        border-color: color('background', 'light');
+
+
+        &::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+            background-color: color('scrollbar', 'background');
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: color('scrollbar', 'thumb');
+        }
+    }
+}
+

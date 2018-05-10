@@ -1,0 +1,56 @@
+/*
+Style for all buttons
+Mostly overrides for Bootstrap
+ */
+
+@import 'colors.scss';
+
+.ready-btn-container {
+    border-top: 1px solid color('foreground', 'light');
+    padding-top: 5px;
+}
+
+.hig__button {
+    background-color: color('button', 'background');
+    border-color: color('button', 'border');
+    margin-right: 10px;
+
+    &+.hig__button {
+        margin-left: 0;
+    }
+
+    &:hover, &:active, &:focus {
+        background-color: color('button', 'hover');
+        text-decoration: none;
+        color: color('text');
+    }
+
+    &.hig__button--secondary {
+        background-color: color('buttonSecondary', 'background');
+        color: color('text');
+        border-color: color('buttonSecondary', 'border');
+
+        &:hover, &:active, &:focus {
+            background-color: color('buttonSecondary', 'hover');
+            border-color: color('buttonSecondary', 'border');
+        }
+    }
+}
+
+
+.channel-selector {
+    margin-bottom: 5px;
+
+    label {
+        font-size: 12px;
+        font-weight: normal;
+
+        input {
+            width: 91px;
+            color: color('text');
+            background: color('background', 'light');
+            border-color: color('background', 'dark');
+            border-radius: 4px;
+        }
+    }
+}

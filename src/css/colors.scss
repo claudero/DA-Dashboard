@@ -1,0 +1,66 @@
+/*
+Color palette
+ */
+
+$colors: (
+    'primary': (
+        'base': #00ae08,
+        'light': #41d843,
+        'dark': #007308
+    ),
+    'accent': (
+        'base': #d3822e,
+        'light': #faa42e,
+        'dark': #a55d2a
+    ),
+    'secondary': (
+        'base': #D41A03,
+        'light': #FF5744,
+        'dark': #871102
+    ),
+    'foreground': (
+        'base': #191919,
+        'light': #333333,
+        'dark': #111111
+    ),
+    'background': (
+        'base': #515151,
+        'light': #888888,
+        'dark': #444444,
+        'backdrop': hsla(0, 0%, 0%, 0.5),
+    ),
+    'text': (
+        'base': #d9d9d9,
+        'grey': #9c9c9c,
+        'light': #e9e9e9,
+        'medium': #a0b3b0,
+        'dark': #000000,
+        'label': rgba(0, 0, 0, .298039),
+    ),
+    'button': (
+        'background': #737373,
+        'border': #3b3b3b,
+        'hover': #999999
+    ),
+    'buttonSecondary': (
+        'background': #3d3d3d,
+        'border': #3b3b3b,
+        'hover': #4b4b4b
+    ),
+    'scrollbar': (
+        'background': #aaa,
+        'thumb': #333
+    )
+);
+
+/**
+* Gets the right color from the color array above
+* Eg use: color('secondary', 'light'); // Returns the light secondary color
+ */
+@function color($key: 'primary', $tone: 'base') {
+    @return map-get(map-get($colors, $key), $tone);
+}
+
+$success: color('primary');
+$error: color('secondary');
+$warning: color('accent');
