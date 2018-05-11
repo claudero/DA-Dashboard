@@ -1,18 +1,15 @@
 /*global PossibleStates, Props*/ // eslint-disable-line no-unused-vars
 // @flow
-//import 'bootstrap/dist/css/bootstrap.css';
-//import 'bootstrap/dist/css/bootstrap-theme.css';
 import 'hig-react/lib/hig-react.css';
-//import './css/containers.css';
 import React, { Component } from 'react';
 
-//import { Row, Grid, Panel } from 'react-bootstrap';
-import TitleLine from './SubComponents/TitleLine';
-import Applications from './SubComponents/Applications';
-import Engines from './SubComponents/Engines';
-import Activities from './SubComponents/Activities';
-import GetTokenBlock from './SubComponents/getappcredentials';
-import { GlobalNav, Dropdown, Checkbox, TextField } from 'hig-react';
+import Applications from './Components/Applications';
+import Engines from './Components/Engines';
+import Activities from './Components/Activities';
+import GetTokenBlock from './Components/getappcredentials';
+import { GlobalNav, } from 'hig-react';
+import logo from "./images/logo.png";
+
 
 type Props = {
     module: string,
@@ -23,7 +20,7 @@ type Props = {
 
 const modules = [
     { id: '1', title: 'Components', icon: 'settings' },
-    { id: '2', title: 'Workitems', icon: 'assets' },
+      { id: '2', title: 'Workitems', icon: 'assets' },
     { id: '3', title: 'Playground', icon: 'assets' },
 ];
 
@@ -44,7 +41,6 @@ class DADashboard extends Component<Props> {
             failedLogin: false,
             token: undefined,
             needLoading: true,
-            fetchFailure: false,
             engines: [],
             packages: [],
             activities: []
@@ -146,6 +142,7 @@ class DADashboard extends Component<Props> {
                         topNav={{
                             header: "Autodesk",
                             headerLabel: "Design Automaiton Console",
+                            logo,
                             projectAccountSwitcher: {
                                 projectTitle : 'Application Keys',
                                 accountTitles : 'Accounts',

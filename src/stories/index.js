@@ -7,10 +7,10 @@ import { action } from '@storybook/addon-actions';
 
 import { withKnobs, text , boolean} from '@storybook/addon-knobs';
 
-import GetTokenBlock from '../SubComponents/getappcredentials';
-import Applications from '../SubComponents/Applications';
-import Engines from '../SubComponents/Engines';
-import Activities from '../SubComponents/Activities';
+import GetTokenBlock from '../Components/getappcredentials';
+import Applications from '../Components/Applications';
+import Engines from '../Components/Engines';
+import Activities from '../Components/Activities';
 
 
 let engines = [

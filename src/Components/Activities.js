@@ -1,13 +1,14 @@
 /*global Props*/ // eslint-disable-line no-unused-vars
 // @flow
 import React, { Component } from 'react';
-import { Table, Toast } from 'hig-react';
+import { Table, Toast , ProgressRing} from 'hig-react';
 import 'hig-react/lib/hig-react.css';
 import Section from './Section';
 
 type Props = {
     fetchFailure?: boolean,
     activities?: Array,
+    loading?: boolean,
 };
 
 class ApplicationDetails extends Component<Props> {
@@ -22,6 +23,7 @@ class ApplicationDetails extends Component<Props> {
         console.log(props);
         return {
             activities : props.activities,
+            loading : props.loading,
             failed : props.fetchFailure
         };
     }
@@ -35,6 +37,11 @@ class ApplicationDetails extends Component<Props> {
                     <Toast status={'danger'}>
                         Error retrieving Design Automation data
                     </Toast>
+                    }
+                </div>
+                <div>
+                    {this.state.loading &&
+                    <ProgressRing size='m'/>
                     }
                 </div>
                 <div style={{ minWidth: '1024px' }}>
