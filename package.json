@@ -4,6 +4,9 @@
   "private": true,
   "dependencies": {
     "async": "^2.6.0",
+    "babel-cli": "^6.26.0",
+    "babel-preset-latest": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
     "bootstrap": "3",
     "es7-shim": "^6.0.0",
     "flow-bin": "^0.54.1",
@@ -42,6 +45,7 @@
     "storybook": "npm-run-all -p watch-css host-storybook",
     "build-storybook-only": "build-storybook -s public",
     "build-storybook": "npm-run-all build-css build-storybook-only",
+    "testReducers": "./node_modules/.bin/babel-node ./src/reducer.tests.js",
     "eslint": "./node_modules/.bin/eslint src/*"
   },
   "devDependencies": {

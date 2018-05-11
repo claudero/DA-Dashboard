@@ -1,0 +1,21 @@
+{
+  "apps": {
+      "list" : [
+        {
+          "name": "MyApp1",
+          "client_id": "asdfasd",
+          "secret": "asdfasdf",
+          "token": "",
+          "fetching": ""
+        },
+        {
+          "name": "MyApp2",
+          "client_id": "asdfasd'",
+          "secret": "asdfasdf",
+          "token": "",
+          "fetching": ""
+        }
+    ],
+    "currentApp": 0
+  }
+}
