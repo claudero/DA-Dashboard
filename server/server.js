@@ -23,7 +23,8 @@ var app = express();
 
 // favicon
 // prepare server routing
-app.set('port', process.env.PORT || 3001); // main port
+app.set('trust proxy', 1) // trust first proxy - HTTPS on Heroku
+app.set('port', process.env.PORT || 3000); // main port
 
 // prepare our API endpoint routing
 var forge = require('./forge');
