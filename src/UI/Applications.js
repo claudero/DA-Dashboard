@@ -1,16 +1,20 @@
 /*global Props*/ // eslint-disable-line no-unused-vars
 // @flow
 import React, { Component } from 'react';
-import { Table, Toast } from 'hig-react';
+import { Table, Toast, ProgressRing } from 'hig-react';
 import 'hig-react/lib/hig-react.css';
 import Section from './Section';
 
 type Props = {
+    applications?: Array,
     fetchFailure?: boolean,
-    packages?: Array,
+    error?: string,
+    fetch?: Function,
+    fetching?: boolean,
+    loaded?: boolean,
 };
 
-class ApplicationDetails extends Component<Props> {
+class ApplicationList extends Component<Props> {
 
     constructor(props) {
         super(props);
@@ -18,12 +22,10 @@ class ApplicationDetails extends Component<Props> {
     }
 
     static getDerivedStateFromProps(props, current_state) {
-        console.log("app props");
-        console.log(props);
-        return {
-            packages : props.packages,
-            failed : props.fetchFailure
-        };
+        if(!props.loaded && !props.fetchFailure) {
+            props.fetch();
+        }
+        return {};
     }
 
 
@@ -37,9 +39,14 @@ class ApplicationDetails extends Component<Props> {
                     </Toast>
                     }
                 </div>
+                <div>
+                    {this.props.fetching &&
+                    <ProgressRing size='m'/>
+                    }
+                </div>
                 <div style={{ minWidth: '1024px' }}>
                     <Table
-                        density='standard'
+                        density='compressed'
                         columns={[
                             {
                                 id: '1',
@@ -70,7 +77,7 @@ class ApplicationDetails extends Component<Props> {
                                 accessor: 'version',
                             }
                         ]}
-                        data={this.state.packages}
+                        data={this.props.applications}
                     />
                 </div>
             </Section>
@@ -78,4 +85,4 @@ class ApplicationDetails extends Component<Props> {
     }
 }
 
-export default ApplicationDetails;
+export default ApplicationList;

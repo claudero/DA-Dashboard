@@ -6,12 +6,16 @@ import 'hig-react/lib/hig-react.css';
 import Section from './Section';
 
 type Props = {
-    fetchFailure?: boolean,
     activities?: Array,
-    loading?: boolean,
+    fetchFailure?: boolean,
+    error?: string,
+    fetch?: Function,
+    fetching?: boolean,
+    loaded?: boolean,
+
 };
 
-class ApplicationDetails extends Component<Props> {
+class ActivityList extends Component<Props> {
 
     constructor(props) {
         super(props);
@@ -19,15 +23,12 @@ class ApplicationDetails extends Component<Props> {
     }
 
     static getDerivedStateFromProps(props, current_state) {
-        console.log("app props");
-        console.log(props);
-        return {
-            activities : props.activities,
-            loading : props.loading,
-            failed : props.fetchFailure
-        };
-    }
+        if(!props.loaded && !props.fetchFailure) {
+            props.fetch();
+        }
+        return {};
 
+    }
 
     render() {
         return (
@@ -40,13 +41,13 @@ class ApplicationDetails extends Component<Props> {
                     }
                 </div>
                 <div>
-                    {this.state.loading &&
+                    {this.props.fetching &&
                     <ProgressRing size='m'/>
                     }
                 </div>
                 <div style={{ minWidth: '1024px' }}>
                     <Table
-                        density='standard'
+                        density='compressed'
                         columns={[
                             {
                                 id: '1',
@@ -77,7 +78,7 @@ class ApplicationDetails extends Component<Props> {
                                 accessor: 'version',
                             }
                         ]}
-                        data={this.state.activities}
+                        data={this.props.activities}
                     />
                 </div>
             </Section>
@@ -85,4 +86,4 @@ class ApplicationDetails extends Component<Props> {
     }
 }
 
-export default ApplicationDetails;
+export default ActivityList;

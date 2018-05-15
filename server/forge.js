@@ -55,30 +55,15 @@ router.get('/api/getapptoken', function (req, res) {
 });
 
 
-router.get('/api/getDADetails', function (req, res) {
-    console.log('getting a call to app details');
-    console.log(req.headers);
-    let detailresponse = {
-        engines : [],
-        activities : [],
-        packages : []
+router.get('/api/getengines', function (req, res) {
+    console.log('getting a call to engine details');
+    let response = {
+        engines : []
     };
 
 
     let enginesUrl = {
         url: 'https://developer.api.autodesk.com/da/us-east/v3/engines',
-        headers: {
-            'Authorization': req.headers.authorization
-        }
-    };
-    let activitiesUrl = {
-        url: 'https://developer.api.autodesk.com/da/us-east/v3/activities',
-        headers: {
-            'Authorization': req.headers.authorization
-        }
-    };
-    let appsUrl = {
-        url: 'https://developer.api.autodesk.com/da/us-east/v3/apps',
         headers: {
             'Authorization': req.headers.authorization
         }
@@ -108,7 +93,38 @@ router.get('/api/getDADetails', function (req, res) {
                     };
                 });
             }));
-        }),
+        })
+    ];
+
+    Promise.all(fetch)
+        .then(function (result) {
+            console.log(result[0]);
+            response.engines = result[0].map( function (engines) {
+                return engines;
+            });
+            res.status(200).end(JSON.stringify(response));
+        })
+        .catch(function (err) {
+            console.log(err);
+            res.status(400).end(JSON.stringify(err));
+        });
+});
+
+
+router.get('/api/getapplications', function (req, res) {
+    console.log('getting a call to application details');
+    let response = {
+        applications : []
+    };
+
+    let appsUrl = {
+        url: 'https://developer.api.autodesk.com/da/us-east/v3/apps',
+        headers: {
+            'Authorization': req.headers.authorization
+        }
+    };
+
+    let fetch = [
         rp(appsUrl).then(function (result) {
             let apps = JSON.parse(result);
             return Promise.all(apps.data.map( function (app) {
@@ -132,7 +148,42 @@ router.get('/api/getDADetails', function (req, res) {
                     };
                 });
             }));
-        }),
+        })
+    ];
+
+    Promise.all(fetch)
+        .then(function (result) {
+            console.log(result[0]);
+
+            response.applications = result[0].map( function (apps) {
+                return apps;
+            });
+
+            res.status(200).end(JSON.stringify(response));
+        })
+        .catch(function (err) {
+            console.log(err);
+            res.status(400).end(JSON.stringify(err));
+        });
+});
+
+
+
+router.get('/api/getactivities', function (req, res) {
+    console.log('getting a call to get activities details');
+    let response = {
+        activities : []
+    };
+
+
+    let activitiesUrl = {
+        url: 'https://developer.api.autodesk.com/da/us-east/v3/activities',
+        headers: {
+            'Authorization': req.headers.authorization
+        }
+    };
+
+    let fetch = [
         rp(activitiesUrl).then(function (result) {
             let activities = JSON.parse(result);
             return Promise.all(activities.data.map( function (activity) {
@@ -157,24 +208,17 @@ router.get('/api/getDADetails', function (req, res) {
 
     Promise.all(fetch)
         .then(function (result) {
+            console.log("getting results");
             console.log(result[0]);
-            detailresponse.engines = result[0].map( function (engines) {
-                return engines;
-            });
 
-            detailresponse.packages = result[1].map( function (apps) {
-                return apps;
-            });
-
-            detailresponse.activities = result[2].map( function (activity) {
+            response.activities = result[0].map( function (activity) {
                 return activity;
             });
-            res.status(200).end(JSON.stringify(detailresponse));
+            res.status(200).end(JSON.stringify(response));
         })
         .catch(function (err) {
             console.log(err);
-            res.status(400).end(JSON.stringify(detailresponse));
+            res.status(400).end(JSON.stringify(err));
         });
 });
-
 module.exports = router;

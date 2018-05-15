@@ -2,8 +2,6 @@
 // @flow
 import React, { Component } from 'react';
 import { H1 } from 'hig-react';
-//import 'hig-react/lib/hig-react.css';
-//import '../css/text.css';
 
 type Props = {
     children: Component,

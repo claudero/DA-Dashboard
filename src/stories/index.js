@@ -7,10 +7,11 @@ import { action } from '@storybook/addon-actions';
 
 import { withKnobs, text , boolean} from '@storybook/addon-knobs';
 
-import GetTokenBlock from '../Components/getappcredentials';
-import Applications from '../Components/Applications';
-import Engines from '../Components/Engines';
-import Activities from '../Components/Activities';
+import GetApplicationCredentials from '../UI/getappcredentials';
+import ApplicationKeys from '../UI/ApplicationKeys';
+import Applications from '../UI/Applications';
+import Engines from '../UI/Engines';
+import Activities from '../UI/Activities';
 
 
 let engines = [
@@ -28,7 +29,7 @@ let engines = [
     }
 ];
 
-let packages = [
+let applications = [
     {
         "engine": "Autodesk.Inventor+22",
         "description": "Change parameters TEST",
@@ -94,14 +95,15 @@ let activities = [
     }
 ];
 
-
+/*
 storiesOf('UI MockUp', module)
   .addDecorator(withKnobs)
-  .add('Enter Credentials', () => <GetTokenBlock failed={boolean('Failed', false)}
+  .add('Enter Credentials', () => <GetApplicationCredentials failed={boolean('Failed', false)}
                                                 getToken={action('Get token selected')} /> );
+*/
 storiesOf('UI MockUp', module)
     .addDecorator(withKnobs)
-    .add('Applications', () => <Applications fetchFailure={boolean('Failed', false)} packages={packages}/> );
+    .add('Applications', () => <Applications fetchFailure={boolean('Failed', false)} applications={applications}/> );
 
 storiesOf('UI MockUp', module)
     .addDecorator(withKnobs)
@@ -110,4 +112,8 @@ storiesOf('UI MockUp', module)
 storiesOf('UI MockUp', module)
     .addDecorator(withKnobs)
     .add('Activities', () => <Activities fetchFailure={boolean('Failed', false)} activities={activities}/> );
+
+storiesOf('UI MockUp', module)
+    .addDecorator(withKnobs)
+    .add('Application Keys', () => <ApplicationKeys applications={[{ client_id : 'my client id', secret : 'my secret 1', name : '"my name1'},{ client_id : 'my client id2', secret : 'my secret 2', name : 'my name2'}]}/> );
 

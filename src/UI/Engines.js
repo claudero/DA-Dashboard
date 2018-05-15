@@ -1,16 +1,21 @@
 /*global Props*/ // eslint-disable-line no-unused-vars
 // @flow
 import React, { Component } from 'react';
-import { Table, Toast } from 'hig-react';
+import { Table, Toast, ProgressRing } from 'hig-react';
 import 'hig-react/lib/hig-react.css';
 import Section from './Section';
 
 type Props = {
-    fetchFailure?: boolean,
     engines?: Array,
+    fetchFailure?: boolean,
+    error?: string,
+    fetch?: Function,
+    fetching?: boolean,
+    string?: token,
+    loaded?: boolean,
 };
 
-class ApplicationDetails extends Component<Props> {
+class EngineList extends Component<Props> {
 
     constructor(props) {
         super(props);
@@ -18,28 +23,30 @@ class ApplicationDetails extends Component<Props> {
     }
 
     static getDerivedStateFromProps(props, current_state) {
-        console.log("app props");
-        console.log(props);
-        return {
-            engines : props.engines,
-            failed : props.fetchFailure
-        };
+        if(!props.loaded && !props.fetchFailure) {
+            props.fetch();
+        }
+        return {};
     }
-
 
     render() {
         return (
             <Section>
                 <div>
-                    {this.state.failed &&
+                    {this.props.fetchFailure &&
                     <Toast status={'danger'}>
                         Error retrieving Design Automation data
                     </Toast>
                     }
                 </div>
+                <div>
+                    {this.props.fetching &&
+                    <ProgressRing size='m'/>
+                    }
+                </div>
                 <div style={{ minWidth: '1024px' }}>
                     <Table
-                        density='standard'
+                        density='compressed'
                         columns={[
                             {
                                 id: '1',
@@ -70,7 +77,7 @@ class ApplicationDetails extends Component<Props> {
                                 accessor: 'version',
                             }
                         ]}
-                        data={this.state.engines}
+                        data={this.props.engines}
                     />
                 </div>
             </Section>
@@ -78,4 +85,4 @@ class ApplicationDetails extends Component<Props> {
     }
 }
 
-export default ApplicationDetails;
+export default EngineList;

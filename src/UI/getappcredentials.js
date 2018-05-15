@@ -9,10 +9,12 @@ import { TextField } from 'hig-react';
 import { Toast } from 'hig-react';
 
 type Props = {
-    appid?: string,
+    appname?: string,
+    client_id?: string,
     secret?: string,
     failed?: boolean,
-    getToken?: Function,
+    add_application?: Function,
+    cancel?: Function
 };
 
 class GetAppCredentials extends Component<Props> {
@@ -25,14 +27,18 @@ class GetAppCredentials extends Component<Props> {
 
     static getDerivedStateFromProps(props, current_state) {
         return {
-            appid : props.appid,
+            client_id : props.client_id,
             failed : props.failed,
-            secret : props.secret
+            secret : props.secret,
+            name : props.name
         };
     }
 
+    onNameChange(event) {
+        this.setState ({ name : event.target.value, failed : false});
+    }
     onAppIdChange(event) {
-        this.setState ({ appid : event.target.value, failed : false});
+        this.setState ({ client_id : event.target.value, failed : false});
     }
     onSecretChange(event) {
         this.setState ({ secret : event.target.value, failed : false});
@@ -49,9 +55,15 @@ class GetAppCredentials extends Component<Props> {
                 <TextLine>Enter your application information</TextLine>
                 <form className="form-group">
                     <TextField
-                        id="appId"
-                        label="Application ID"
-                        value={this.state.appid}
+                        id="name"
+                        label="Application name"
+                        value={this.state.name}
+                        onChange={(e) => this.onNameChange(e)}
+                    />
+                    <TextField
+                        id="clientId"
+                        label="Client ID"
+                        value={this.state.client_id}
                         onChange={(e) => this.onAppIdChange(e)}
                     />
                     <TextField
@@ -62,7 +74,8 @@ class GetAppCredentials extends Component<Props> {
                     />
                 </form>
                 <div>
-                    <Button size="standard" title="Get token" width="shrink" onClick={() => this.props.getToken(this.state.appid,this.state.secret)}/>
+                    <Button size="standard" title="Add" width="shrink" onClick={() => this.props.add_application(this.state.name, this.state.client_id,this.state.secret)}/>
+                    <Button size="standard" title="Cancel" width="shrink" onClick={() => this.props.cancel()}/>
                 </div>
             </div>
         );
