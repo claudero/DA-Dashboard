@@ -4,11 +4,15 @@
 
 1. `yarn install`
 2. Add file dev.config.json in src. You can override any properties from config.js in this.
-3. `yarn start`
+3. `yarn start-dev`
 
 ## Development Workflow
 
-`yarn start` - Starts the local server that hosts the app at http://localhost:3000 and watches for file changes
+`yarn start-dev` - Starts the local react server that hosts the app at http://localhost:3000 and watches for file changes
+In parallel, a proxy is booted on port 3001 which serves all of Design Automation and Forge APIs
+
+`yarn start` - Starts the main server on port 3000 and serves the build folder. This will host the most recent version of the react app that has been built and published int the repo.
+This is used in the context of a deployment to something like Heroku.
 
 `yarn storybook` - Starts a local server at http://localhost:9009 that hosts a ["Storybook"](https://github.com/storybooks/storybook) and listens to file changes
 
