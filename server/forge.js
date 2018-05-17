@@ -22,7 +22,6 @@
 let express = require('express');
 let router = express.Router();
 let rp = require('request-promise');
-let Promise = require('Promise');
 
 // make requests for tokens
 let Token = require('./forge.token');
