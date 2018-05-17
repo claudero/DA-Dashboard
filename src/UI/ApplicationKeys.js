@@ -17,6 +17,10 @@ type Props = {
     remove_application?: Function,
 };
 
+function getApplicationTableData(props) {
+    return props.applications.map( (key,idx)=> { return Object.assign(key, { id : idx, selected : props.current_application===key.client_id});});
+}
+
 class ApplicationKeys extends Component<Props> {
 
     constructor(props) {
@@ -26,11 +30,14 @@ class ApplicationKeys extends Component<Props> {
         };
     }
 
+    static getDerivedStateFromProps(props, current_state) {
+        return Object.assign({current_state,
+            data : getApplicationTableData(props)
+        });
+
+    }
+
     add_application(name,client, secret) {
-        console.log("adding new credentiasl")
-        console.log(name);
-        console.log(client);
-        console.log(secret);
         this.props.add_application(name, client, secret);
         this.setState({mode : 'list'});
     }
@@ -44,13 +51,37 @@ class ApplicationKeys extends Component<Props> {
         this.setState({mode : 'list'});
     }
 
-    getApplicationTableData() {
-        let self = this;
-        console.log ("current application");
-        console.log (this.props.current_application);
-        console.log (this.props);
-        return this.props.applications.map( (key,idx)=> { return Object.assign(key, { id : idx, selected : self.props.current_application===key.client_id});});
+    remove_applications() {
+
+        this.state.data.forEach( (key)=> {
+
+            if(key.selected) {
+                console.log("delete: " + key.client_id);
+                this.props.remove_application(key.client_id);
+            }
+        });
+
     }
+
+
+
+    onSelectionChange = selectedInfo => {
+        const updatedData = this.state.data.map(row => ({
+            ...row,
+            selected: selectedInfo.selected
+        }));
+        this.setState({ data: updatedData });
+    };
+
+    checkboxHandler = selectedInfo => {
+        const existingData = this.state.data;
+        const selectedIndex = existingData.findIndex(
+            row => row.id === selectedInfo.id
+        );
+        existingData[selectedIndex].selected = selectedInfo.selected;
+        this.setState({ data: existingData });
+    };
+
 
     render() {
         return (
@@ -63,10 +94,14 @@ class ApplicationKeys extends Component<Props> {
                             <ActionBar>
                                 <ActionBarGroup>
                                     <IconButton icon="add" title="add" type="flat" onClick={() => this.add_credentials() }/>
+                                    <IconButton icon="trash" title="delete" type="flat" onClick={() => this.remove_applications() }/>
                                 </ActionBarGroup>
                             </ActionBar>
                             <Table
                                 density='standard'
+                                onRowSelectionChange={this.checkboxHandler}
+                                onSelectAllSelectionChange={this.onSelectionChange}
+                                selectable
                                 columns={[
                                     {
                                         id: '1',
@@ -83,7 +118,7 @@ class ApplicationKeys extends Component<Props> {
                                         accessor: 'client_id'
                                     }
                                 ]}
-                                data={this.getApplicationTableData()}
+                                data={this.state.data}
                             />
                         </div>
                     }
