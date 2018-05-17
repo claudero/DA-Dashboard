@@ -52,8 +52,10 @@ function init(dispatch) {
         initialState.list.map((key) => dispatch(add_key(key.name,key.client_id, key.secret)));
     }
     dispatch(reset_app_token());
-    dispatch(set_current_api_key(initialState.currentApp));
-    dispatch(fetch_app_token());
+    if(initialState.currentApp) {
+        dispatch(set_current_api_key(initialState.currentApp));
+        dispatch(fetch_app_token());
+    }
 }
 
 init(store.dispatch);
