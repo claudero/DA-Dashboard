@@ -134,6 +134,7 @@ class DADashboard extends Component<Props> {
                             superHeaderLabel: 'Autodesk',
                             headerLabel: 'Design Automation Console'
                         }}
+                        sideNavOpen= {true}
                         showSubNav={true}
                         activeModuleId={this.state.navigation}
                         onModuleChange={this.navigate}
