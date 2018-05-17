@@ -36,8 +36,8 @@
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",
     "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
-    "start-js": "react-scripts start",
-    "start-dev": "npm-run-all -p watch-css start-js",
+    "start-js": "set PORT=3001 && react-scripts start",
+    "start-dev": "npm-run-all -p watch-css start-js start",
     "start-server": "node start_server.js",
     "start": "node start_server.js",
     "build-js": "react-scripts build",
