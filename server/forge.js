@@ -23,46 +23,84 @@ let express = require('express');
 let router = express.Router();
 let rp = require('request-promise');
 
-// make requests for tokens
-let Token = require('./forge.token');
+let da_environments = {
+    prod : 'https://developer.api.autodesk.com/da/us-east/v3',
+    stg : 'https://developer-stg.api.autodesk.com/da/us-east/v3',
+    dev : 'https://developer-dev.api.autodesk.com/da/us-west/v3',
+};
+
+let auth_environments = {
+    prod : 'https://developer.api.autodesk.com/authentication/v1/authenticate',
+    stg : 'https://developer-stg.api.autodesk.com/authentication/v1/authenticate',
+    dev : 'https://developer-dev.api.autodesk.com/authentication/v1/authenticate',
+};
+
 
 router.get('/api/getapptoken', function (req, res) {
-  console.log(req.query);
-  if(!req.query.client_id) {
-      res.status(400).end();
-      return;
-  }
-  if(!req.query.client_secret) {
-      res.status(400).end();
-      return;
-  }
-  if(!req.query.token) {
-      res.status(400).end();
-      return;
-  }
-
-  var t = new Token(req.query.client_id, req.query.client_secret);
-
-  t.getTokenInternal(function (err, token) {
-    if(err) {
-        res.status(400).end(err);
-    } else {
-        res.status(200).end(token);
+    if(!req.query.client_id) {
+        res.status(400).end();
+        return;
+    }
+    if(!req.query.client_secret) {
+        res.status(400).end();
+        return;
+    }
+    if(!req.query.token) {
+        res.status(400).end();
+        return;
+    }
+    if(!req.query.environment) {
+        res.status(400).end();
+        return;
     }
 
-  });
+    let baseUrl = auth_environments[req.query.environment];
+
+    if(!baseUrl) {
+        res.status(400).end();
+        return;
+    }
+
+
+    let authRequestUrl = {
+        url: baseUrl,
+        method : 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body : 'client_id=' + encodeURIComponent(req.query.client_id) + '&client_secret=' + encodeURIComponent(req.query.client_secret) + '&grant_type=client_credentials&scope=code:all'
+  };
+
+    rp(authRequestUrl).then(function (result) {
+        let auth = JSON.parse(result);
+        res.status(200).end(auth.access_token);
+    })
+    .catch(function (err) {
+            console.log(err);
+            res.status(400).end(JSON.stringify(err));
+    });
 });
 
 
 router.get('/api/getengines', function (req, res) {
-    console.log('getting a call to engine details');
+
     let response = {
         engines : []
     };
 
+    if(!req.headers.environment) {
+        res.status(400).end();
+        return;
+    }
+
+
+    console.log("headers");
+    console.log(req.headers);
+
+    let baseUrl = da_environments[req.headers.environment];
 
     let enginesUrl = {
-        url: 'https://developer.api.autodesk.com/da/us-east/v3/engines',
+        url: baseUrl+ '/engines',
         headers: {
             'Authorization': req.headers.authorization
         }
@@ -75,7 +113,7 @@ router.get('/api/getengines', function (req, res) {
             return Promise.all(engines.data.map( function (engine) {
 
                 let enginesDetailsUrl = {
-                    url: 'https://developer.api.autodesk.com/da/us-east/v3/engines/' + engine,
+                    url: baseUrl+ '/engines/' + engine,
                     headers: {
                         'Authorization': req.headers.authorization
                     }
@@ -97,7 +135,6 @@ router.get('/api/getengines', function (req, res) {
 
     Promise.all(fetch)
         .then(function (result) {
-            console.log(result[0]);
             response.engines = result[0].map( function (engines) {
                 return engines;
             });
@@ -111,13 +148,19 @@ router.get('/api/getengines', function (req, res) {
 
 
 router.get('/api/getapplications', function (req, res) {
-    console.log('getting a call to application details');
     let response = {
         applications : []
     };
 
+    if(!req.headers.environment) {
+        res.status(400).end();
+        return;
+    }
+
+    let baseUrl = da_environments[req.headers.environment];
+
     let appsUrl = {
-        url: 'https://developer.api.autodesk.com/da/us-east/v3/apps',
+        url: baseUrl+ '/apps',
         headers: {
             'Authorization': req.headers.authorization
         }
@@ -129,7 +172,7 @@ router.get('/api/getapplications', function (req, res) {
             return Promise.all(apps.data.map( function (app) {
 
                 let appsDetailsUrl = {
-                    url: 'https://developer.api.autodesk.com/da/us-east/v3/apps/' + app,
+                    url: baseUrl+ '/apps/' + app,
                     headers: {
                         'Authorization': req.headers.authorization
                     }
@@ -152,8 +195,6 @@ router.get('/api/getapplications', function (req, res) {
 
     Promise.all(fetch)
         .then(function (result) {
-            console.log(result[0]);
-
             response.applications = result[0].map( function (apps) {
                 return apps;
             });
@@ -169,14 +210,19 @@ router.get('/api/getapplications', function (req, res) {
 
 
 router.get('/api/getactivities', function (req, res) {
-    console.log('getting a call to get activities details');
     let response = {
         activities : []
     };
 
+    if(!req.headers.environment) {
+        res.status(400).end();
+        return;
+    }
+
+    let baseUrl = da_environments[req.headers.environment];
 
     let activitiesUrl = {
-        url: 'https://developer.api.autodesk.com/da/us-east/v3/activities',
+        url: baseUrl+ '/activities',
         headers: {
             'Authorization': req.headers.authorization
         }
@@ -188,7 +234,7 @@ router.get('/api/getactivities', function (req, res) {
             return Promise.all(activities.data.map( function (activity) {
 
                 let activityDetailsUrl = {
-                    url: 'https://developer.api.autodesk.com/da/us-east/v3/activities/' + activity,
+                    url: baseUrl+ '/activities/' + activity,
                     headers: {
                         'Authorization': req.headers.authorization
                     }
@@ -207,9 +253,6 @@ router.get('/api/getactivities', function (req, res) {
 
     Promise.all(fetch)
         .then(function (result) {
-            console.log("getting results");
-            console.log(result[0]);
-
             response.activities = result[0].map( function (activity) {
                 return activity;
             });

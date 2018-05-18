@@ -3,13 +3,14 @@ import fetch from 'isomorphic-fetch';
 
 
 
-export const add_key = (name, client_id, secret) => {
+export const add_key = (name, client_id, secret, environment) => {
     return {
         type: C.ADD_API_KEY,
         payload: {
             client_id,
             secret,
-            name
+            name,
+            environment
         }
     };
 };
@@ -30,12 +31,13 @@ export const set_current_api_key = (client_id) => {
 };
 
 
-export const set_app_token = (error,token) => {
+export const set_app_token = (error,token, environment) => {
     return {
         type: C.SET_TOKEN,
         payload: {
             error,
-            token
+            token,
+            environment
         }
     };
 };
@@ -54,8 +56,7 @@ export const fetch_app_token = () => (dispatch, getState) => {
         type: C.FETCH_TOKEN
     });
 
-
-    fetch('/api/getAppToken?client_id=' + encodeURIComponent(app.client_id) + '&client_secret=' + encodeURIComponent(app.secret) + '&token=sasd')
+    fetch('/api/getAppToken?client_id=' + encodeURIComponent(app.client_id) + '&client_secret=' + encodeURIComponent(app.secret) + '&environment=' + encodeURIComponent(app.environment)+ '&token=sasd')
             .then(function (response) {
                 if(response.status === 200) {
                     return response.text();
@@ -64,7 +65,7 @@ export const fetch_app_token = () => (dispatch, getState) => {
                 }
             })
             .then(function (token) {
-                dispatch(set_app_token(null, token));
+                dispatch(set_app_token(null, token, app.environment));
             })
             .catch(function() {
                 dispatch(set_app_token("failue to get token"));

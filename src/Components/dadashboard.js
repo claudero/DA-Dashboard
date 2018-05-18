@@ -26,7 +26,7 @@ const mapAppStateToProps = (state) => {
 
 const mapAppDispatchToProps = (dispatch) => {
     return {
-        add_application : (n,c, s) => dispatch(add_key(n,c,s)),
+        add_application : (n, c, s, e) => {dispatch(add_key(n,c,s,e))},
         set_current_api_key : (c) => dispatch(set_current_api_key(c)),
         remove_application :  (c) => dispatch(remove_key(c))
     };

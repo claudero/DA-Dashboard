@@ -10,7 +10,6 @@
     "bootstrap": "3",
     "es7-shim": "^6.0.0",
     "flow-bin": "^0.54.1",
-    "forge-oauth2": "*",
     "guid": "^0.0.12",
     "hig-react": "^0.28.36",
     "isomorphic-fetch": "^2.2.1",

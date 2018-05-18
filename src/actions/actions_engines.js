@@ -44,7 +44,8 @@ export const fetch_engines = () => (dispatch, getState) => {
     fetch('/api/getengines', {
         method: 'GET',
         headers: {
-            Authorization : 'Bearer ' + app_keys.token
+            Authorization : 'Bearer ' + app_keys.token,
+            environment : app_keys.environment
         }
     }).then(function (response){
         if(response.status === 200) {

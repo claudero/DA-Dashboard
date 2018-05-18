@@ -49,7 +49,7 @@ store.subscribe(()=> {
 
 function init(dispatch) {
     if(initialState && initialState.list) {
-        initialState.list.map((key) => dispatch(add_key(key.name,key.client_id, key.secret)));
+        initialState.list.map((key) => dispatch(add_key(key.name,key.client_id, key.secret, key.environment)));
     }
     dispatch(reset_app_token());
     if(initialState.currentApp) {

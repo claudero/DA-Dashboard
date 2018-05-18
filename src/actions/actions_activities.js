@@ -48,7 +48,8 @@ export const fetch_activities = () => (dispatch, getState) => {
     fetch('/api/getactivities', {
         method: 'GET',
         headers: {
-            Authorization : 'Bearer ' + app_keys.token
+            Authorization : 'Bearer ' + app_keys.token,
+            environment : app_keys.environment
         }
     }).then(function (response){
         if(response.status === 200) {

@@ -44,7 +44,8 @@ export const fetch_applications = () => (dispatch, getState) => {
     fetch('/api/getapplications', {
         method: 'GET',
         headers: {
-            Authorization : 'Bearer ' + app_keys.token
+            Authorization : 'Bearer ' + app_keys.token,
+            environment : app_keys.environment
         }
     }).then(function (response){
         if(response.status === 200) {

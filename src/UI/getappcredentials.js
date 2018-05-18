@@ -5,12 +5,12 @@ import { Button } from 'hig-react';
 import 'hig-react/lib/hig-react.css';
 import TextLine from './TextLine';
 
-import { TextField } from 'hig-react';
-import { Toast } from 'hig-react';
+import { TextField, Toast, Dropdown } from 'hig-react';
 
 type Props = {
     appname?: string,
     client_id?: string,
+    environment?: string,
     secret?: string,
     failed?: boolean,
     add_application?: Function,
@@ -26,10 +26,12 @@ class GetAppCredentials extends Component<Props> {
     }
 
     static getDerivedStateFromProps(props, current_state) {
+        console.log(current_state);
         return {
             client_id : props.client_id,
             failed : props.failed,
             secret : props.secret,
+            environment : props.environment || 'prod',
             name : props.name
         };
     }
@@ -42,6 +44,9 @@ class GetAppCredentials extends Component<Props> {
     }
     onSecretChange(event) {
         this.setState ({ secret : event.target.value, failed : false});
+    }
+    setEnvironment(env) {
+        this.setState({ environment: env, failed : false});
     }
 
     render() {
@@ -72,9 +77,19 @@ class GetAppCredentials extends Component<Props> {
                         value={this.state.secret}
                         onChange={(e) => this.onSecretChange(e)}
                     />
+                    <Dropdown
+                        label="Environment"
+                        options={[
+                            { label: "Production", id: "prod", value: "prod" },
+                            { label: "Staging", id: "stg", value: "stg"},
+                            { label: "Development", id: "dev", value: "dev" }
+                        ]}
+                        value={this.state.environment}
+                        onChange={(e) => this.setEnvironment(e)}
+                    />
                 </form>
                 <div>
-                    <Button size="standard" title="Add" width="shrink" onClick={() => this.props.add_application(this.state.name, this.state.client_id,this.state.secret)}/>
+                    <Button size="standard" title="Add" width="shrink" onClick={() => this.props.add_application(this.state.name, this.state.client_id,this.state.secret, this.state.environment)}/>
                     <Button size="standard" title="Cancel" width="shrink" onClick={() => this.props.cancel()}/>
                 </div>
             </div>

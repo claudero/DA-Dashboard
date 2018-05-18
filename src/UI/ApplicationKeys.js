@@ -37,8 +37,8 @@ class ApplicationKeys extends Component<Props> {
 
     }
 
-    add_application(name,client, secret) {
-        this.props.add_application(name, client, secret);
+    add_application(name,client, secret, env) {
+        this.props.add_application(name, client, secret, env);
         this.setState({mode : 'list'});
     }
 
@@ -116,6 +116,13 @@ class ApplicationKeys extends Component<Props> {
                                         alignment: 'left',
                                         width: '1fr',
                                         accessor: 'client_id'
+                                    },
+                                    {
+                                        id: '3',
+                                        HeaderCell: 'Environment',
+                                        alignment: 'left',
+                                        width: '1fr',
+                                        accessor: 'environment'
                                     }
                                 ]}
                                 data={this.state.data}
@@ -124,7 +131,7 @@ class ApplicationKeys extends Component<Props> {
                     }
                     {
                         this.state.mode === 'add' &&
-                        <GetAppCredentials add_application={(name, clientid, secret) => {this.add_application(name, clientid, secret);}} cancel={() =>{this.cancel_add_key()}}/>
+                        <GetAppCredentials add_application={(name, clientid, secret, environment) => {this.add_application(name, clientid, secret, environment);}} cancel={() =>{this.cancel_add_key()}}/>
                     }
                 </div>
             </Section>
