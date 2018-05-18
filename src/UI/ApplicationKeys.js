@@ -18,7 +18,7 @@ type Props = {
 };
 
 function getApplicationTableData(props) {
-    return props.applications.map( (key,idx)=> { return Object.assign(key, { id : idx, selected : props.current_application===key.client_id});});
+    return props.applications.map( (key,idx)=> { return Object.assign({}, key, { id : idx, selected : props.current_application===key.client_id});});
 }
 
 class ApplicationKeys extends Component<Props> {
@@ -31,10 +31,20 @@ class ApplicationKeys extends Component<Props> {
     }
 
     static getDerivedStateFromProps(props, current_state) {
-        return Object.assign({current_state,
-            data : getApplicationTableData(props)
-        });
+/*
+        console.log('Props (key)');
+        console.log(props);
+        console.log('Current state (keys)');
+        console.log(current_state);*/
+        let newState =
+            Object.assign({current_state,
+                data : getApplicationTableData(props)
+            });
+/*        console.log('New state (keys)');
+        console.log(newState);*/
 
+
+        return newState;
     }
 
     add_application(name,client, secret, env) {

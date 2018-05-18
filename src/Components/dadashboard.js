@@ -8,7 +8,7 @@ import Engines from '../UI/Engines';
 import WorkItems from '../UI/WorkItems';
 import ApplicationKeys from '../UI/ApplicationKeys';
 import Activities from '../UI/Activities';
-import { GlobalNav, } from 'hig-react';
+import { GlobalNav, Toast} from 'hig-react';
 import { fetch_engines } from '../actions/actions_engines';
 import { fetch_activities } from '../actions/actions_activities';
 import { fetch_applications } from '../actions/actions_applications';
@@ -82,7 +82,11 @@ const ActivitiyContainer = connect(mapActivityStateToProps, mapActivityDispatchT
 
 
 type Props = {
-    gotoPlayground: Function,
+    applications?: Array,
+    currentApplication?: String,
+    token_error?: String,
+    set_current_api_key?: Function,
+    gotoPlayground: Function
 };
 
 const NAV = {
@@ -110,6 +114,16 @@ const submodules = [
     ];
 
 
+function getApplicationTableData(props) {
+
+    //console.log('application list');
+    //console.log(props.applications);
+
+    //return props.applications.map( (key)=> { return Object.assign(key, { id : key.client_id, label : key.name, selected : props.current_application===key.client_id});});
+    return props.applications.map( (key)=> { return Object.assign({}, key, { id : key.client_id, label : key.name, selected : props.current_application===key.client_id});});
+}
+
+
 class DADashboard extends Component<Props> {
 
     constructor(props) {
@@ -119,11 +133,32 @@ class DADashboard extends Component<Props> {
         };
     }
 
+    static getDerivedStateFromProps(props, current_state) {
+
+/*        console.log('Props (dashboard)');
+        console.log(props);
+        console.log('Current state (dashboard)');
+        console.log(current_state);*/
+        let newState =
+            Object.assign({current_state,
+            apps : getApplicationTableData(props)
+        });
+/*        console.log('New state (dashboard');
+        console.log(newState);*/
+
+        return newState;
+    }
+
     navigate = id => {
         this.setState({ navigation: id });
         if(id===NAV.PLAYGROUND){
             this.props.gotoPlayground();
         }
+    };
+
+    projectClicked = id => {
+        console.log("project clicked", id);
+        this.props.set_current_api_key(id);
     };
 
     render() {
@@ -145,7 +180,9 @@ class DADashboard extends Component<Props> {
                             projectAccountSwitcher: {
                                 projectTitle : 'Application Keys',
                                 accountTitles : 'Accounts',
-                                projects: this.state.applicationKeys/*,
+                                activeProjectId : this.props.currentApplication,
+                                onProjectClick: (id) => {this.projectClicked(id)},
+                                projects: this.state.apps,/*
                                 accounts: [
                                     { label: 'My User Account', id: 'a1' }
                                 ]*/
@@ -153,6 +190,16 @@ class DADashboard extends Component<Props> {
                         }}
                     >
                     <div>
+                        {this.props.token_error &&
+                        <Toast status={'danger'}>
+                            Error retrieving Forge token
+                        </Toast>
+                        }
+
+                    </div>
+
+                    <div>
+
                         {
                             this.state.navigation === NAV.APPLICATION_KEYS &&
                             <ApplicationKeysContainer/>

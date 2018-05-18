@@ -4,8 +4,28 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import DADashboard from './Components/dadashboard';
 import Playground from './playground';
+import { set_current_api_key, fetch_app_token } from './actions/actions_token';
 
-//import './css/containers.css';
+
+const mapAppStateToProps = (state, ownProps) => {
+    return {
+        applications : state.app_keys.list,
+        currentApplication : state.app_keys.currentApp,
+        token_error : state.app_keys.error,
+        gotoPlayground : ownProps.gotoPlayground
+
+    };
+};
+
+const mapAppDispatchToProps = (dispatch) => {
+    return {
+        set_current_api_key : (c) => {
+            dispatch(set_current_api_key(c));
+            dispatch(fetch_app_token());
+        }
+    };
+};
+const DashboardContainer = connect(mapAppStateToProps,mapAppDispatchToProps)(DADashboard);
 
 type Props = {
 };
@@ -41,7 +61,7 @@ class App extends Component<Props> {
                 }
                 {
                     (!this.state.playground) &&
-                    <DADashboard
+                    <DashboardContainer
                         gotoPlayground={ () => this.gotoPlayground()}
                     />
                 }

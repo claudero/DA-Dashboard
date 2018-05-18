@@ -97,11 +97,6 @@ let activities = [
 
 /*
 storiesOf('UI MockUp', module)
-  .addDecorator(withKnobs)
-  .add('Enter Credentials', () => <GetApplicationCredentials failed={boolean('Failed', false)}
-                                                getToken={action('Get token selected')} /> );
-*/
-storiesOf('UI MockUp', module)
     .addDecorator(withKnobs)
     .add('Applications', () => <Applications fetchFailure={boolean('Failed', false)} applications={applications}/> );
 
@@ -112,8 +107,10 @@ storiesOf('UI MockUp', module)
 storiesOf('UI MockUp', module)
     .addDecorator(withKnobs)
     .add('Activities', () => <Activities fetchFailure={boolean('Failed', false)} activities={activities}/> );
-
+*/
+/*
 storiesOf('UI MockUp', module)
     .addDecorator(withKnobs)
     .add('Application Keys', () => <ApplicationKeys applications={[{ client_id : 'my client id', secret : 'my secret 1', name : '"my name1'},{ client_id : 'my client id2', secret : 'my secret 2', name : 'my name2'}]}/> );
 
+*/

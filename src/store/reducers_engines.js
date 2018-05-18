@@ -28,6 +28,7 @@ export default (state=initialState, action) => {
         case C.SET_TOKEN :
         case C.FETCH_TOKEN :
         case C.RESET_TOKEN :
+        case C.SET_CURRENT_API_KEY :
             return initialState;
         default :
             return state;

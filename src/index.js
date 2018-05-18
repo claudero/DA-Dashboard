@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import reducer from './store/reducer.js';
 import App from './App';
+//import C from './constants'
 import {add_key, reset_app_token, fetch_app_token, set_current_api_key} from './actions/actions_token';
 import registerServiceWorker from './registerServiceWorker';
 
@@ -16,8 +17,12 @@ const consoleMessage = store => next => action => {
     let result;
     console.groupCollapsed(`dispatching action => ${action.type}`);
 
+    console.log(`Payload : ${JSON.stringify(action.payload)}`);
     result = next(action);
+/*
+    let finalState = store.getState();
 
+    console.log(`Store : ${JSON.stringify(finalState)}`);*/
     console.groupEnd();
 
     return result;
