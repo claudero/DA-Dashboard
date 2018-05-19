@@ -93,10 +93,6 @@ router.get('/api/getengines', function (req, res) {
         return;
     }
 
-
-    console.log("headers");
-    console.log(req.headers);
-
     let baseUrl = da_environments[req.headers.environment];
 
     let enginesUrl = {
