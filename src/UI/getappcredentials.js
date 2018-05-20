@@ -97,10 +97,4 @@ class GetAppCredentials extends Component<Props> {
     }
 }
 
-GetAppCredentials.defaultProps = {
-    appid : '',
-    secret: ''
-};
-
-
 export default GetAppCredentials;
