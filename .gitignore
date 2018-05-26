@@ -8,6 +8,8 @@
 
 # production
 src/**/*.css
+!src/playground/*.css
+
 storybook-static
 
 # misc
