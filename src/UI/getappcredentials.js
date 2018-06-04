@@ -28,11 +28,11 @@ class GetAppCredentials extends Component<Props> {
     static getDerivedStateFromProps(props, current_state) {
         console.log(current_state);
         return {
-            client_id : props.client_id,
-            failed : props.failed,
-            secret : props.secret,
-            environment : props.environment || 'prod',
-            name : props.name
+            client_id : current_state.client_id ,
+            failed : current_state.failed,
+            secret : current_state.secret,
+            environment : current_state.environment || 'prod',
+            name : current_state.name
         };
     }
 
