@@ -49,7 +49,7 @@ class EngineList extends Component<Props> {
                     }
                 </div>
                 <div>
-                    {!this.props.fetching &&
+                    {(!this.props.fetching && !this.props.fetchFailure) &&
                     <AutoResizer onResize = {this.onResize}  height={600}>
                         {({ width, height }) => (
                             <MatrixTable
