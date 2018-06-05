@@ -80,6 +80,7 @@ class GetAppCredentials extends Component<Props> {
                         label="Environment"
                         options={[
                             { label: "Production", id: "prod", value: "prod" },
+                            { label: "Pre-production", id: "stg", value: "preprod"},
                             { label: "Staging", id: "stg", value: "stg"},
                             { label: "Development", id: "dev", value: "dev" }
                         ]}

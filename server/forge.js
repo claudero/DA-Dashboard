@@ -23,36 +23,9 @@ let express = require('express');
 let router = express.Router();
 let rp = require('request-promise');
 
-let da_environments = {
-    prod : 'https://developer.api.autodesk.com/da/us-east/v3',
-    stg : 'https://developer-stg.api.autodesk.com/da/us-east/v3',
-    dev : 'https://developer-dev.api.autodesk.com/da/us-west/v3',
-};
-
-let auth_environments = {
-    prod : 'https://developer.api.autodesk.com/authentication/v1/authenticate',
-    stg : 'https://developer-stg.api.autodesk.com/authentication/v1/authenticate',
-    dev : 'https://developer-dev.api.autodesk.com/authentication/v1/authenticate',
-};
 
 
-router.get('/api/getapptoken', function (req, res) {
-    if(!req.query.client_id) {
-        res.status(400).end();
-        return;
-    }
-    if(!req.query.client_secret) {
-        res.status(400).end();
-        return;
-    }
-    if(!req.query.token) {
-        res.status(400).end();
-        return;
-    }
-    if(!req.query.environment) {
-        res.status(400).end();
-        return;
-    }
+function tokenv1(req,res) {
 
     let baseUrl = auth_environments[req.query.environment];
 
@@ -66,32 +39,28 @@ router.get('/api/getapptoken', function (req, res) {
         url: baseUrl,
         method : 'POST',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/x-www-form-urlencoded'
         },
         body : 'client_id=' + encodeURIComponent(req.query.client_id) + '&client_secret=' + encodeURIComponent(req.query.client_secret) + '&grant_type=client_credentials&scope=code:all'
-  };
+    };
 
     rp(authRequestUrl).then(function (result) {
         let auth = JSON.parse(result);
         res.status(200).end(auth.access_token);
     })
-    .catch(function (err) {
+        .catch(function (err) {
             console.log(err.message);
             res.status(400).end(JSON.stringify(err));
-    });
-});
+        });
+}
 
 
-router.get('/api/getengines', function (req, res) {
+function enginesv1(req,res) {
+
 
     let response = {
         engines : []
     };
-
-    if(!req.headers.environment) {
-        res.status(400).end();
-        return;
-    }
 
     let baseUrl = da_environments[req.headers.environment];
 
@@ -139,20 +108,13 @@ router.get('/api/getengines', function (req, res) {
         .catch(function (err) {
             console.log(err.message);
             res.status(400).end(JSON.stringify(err));
-        });
-});
+        });}
 
 
-router.get('/api/getapplications', function (req, res) {
+function appsv1(req,res) {
     let response = {
         applications : []
     };
-
-    if(!req.headers.environment) {
-        res.status(400).end();
-        return;
-    }
-
     let baseUrl = da_environments[req.headers.environment];
 
     let appsUrl = {
@@ -201,20 +163,70 @@ router.get('/api/getapplications', function (req, res) {
             console.log(err.message);
             res.status(400).end(JSON.stringify(err));
         });
-});
+
+}
 
 
+function appsv2(req,res) {
+    let response = {
+        applications : []
+    };
+    let baseUrl = da_environments[req.headers.environment];
 
-router.get('/api/getactivities', function (req, res) {
+    let appsUrl = {
+        url: baseUrl+ '/appbundles',
+        headers: {
+            'Authorization': req.headers.authorization
+        }
+    };
+
+    let fetch = [
+        rp(appsUrl).then(function (result) {
+            let apps = JSON.parse(result);
+            return Promise.all(apps.data.map( function (app) {
+
+                let appsDetailsUrl = {
+                    url: baseUrl+ '/appbundles/' + app,
+                    headers: {
+                        'Authorization': req.headers.authorization
+                    }
+                };
+
+                return rp(appsDetailsUrl).then( function (appDetails) {
+
+                    let app = JSON.parse(appDetails);
+
+                    return {
+                        engine : app.engine,
+                        description : app.description,
+                        version : app.version.toString(),
+                        id : app.id
+                    };
+                });
+            }));
+        })
+    ];
+
+    Promise.all(fetch)
+        .then(function (result) {
+            response.applications = result[0].map( function (apps) {
+                return apps;
+            });
+
+            res.status(200).end(JSON.stringify(response));
+        })
+        .catch(function (err) {
+            console.log(err.message);
+            res.status(400).end(JSON.stringify(err));
+        });
+
+}
+
+
+function activitiesv1(req,res) {
     let response = {
         activities : []
     };
-
-    if(!req.headers.environment) {
-        res.status(400).end();
-        return;
-    }
-
     let baseUrl = da_environments[req.headers.environment];
 
     let activitiesUrl = {
@@ -258,5 +270,139 @@ router.get('/api/getactivities', function (req, res) {
             console.log(err.message);
             res.status(400).end(JSON.stringify(err));
         });
+}
+
+
+let da_environments = {
+    prod : 'https://developer.api.autodesk.com/da/us-east/v3',
+    preprod : 'https://developer.api.autodesk.com/preview.da/us-east/v3',
+    stg : 'https://developer-stg.api.autodesk.com/da/us-east/v3',
+    dev : 'https://developer-dev.api.autodesk.com/da/us-west/v3',
+};
+
+let auth_environments = {
+    prod : 'https://developer.api.autodesk.com/authentication/v1/authenticate',
+    preprod : 'https://developer.api.autodesk.com/authentication/v1/authenticate',
+    stg : 'https://developer-stg.api.autodesk.com/authentication/v1/authenticate',
+    dev : 'https://developer-dev.api.autodesk.com/authentication/v1/authenticate',
+};
+
+
+let apis = {
+    prod : {
+        gettoken :   tokenv1,
+        getApps :   appsv1,
+        getEngines : enginesv1,
+        getActivities : activitiesv1
+    },
+    preprod : {
+        gettoken :   tokenv1,
+        getApps :   appsv1,
+        getEngines : enginesv1,
+        getActivities : activitiesv1
+    },
+    stg : {
+        gettoken :   tokenv1,
+        getApps :   appsv2,
+        getEngines : enginesv1,
+        getActivities : activitiesv1,
+    },
+    dev : {
+        gettoken :   tokenv1,
+        getApps :   appsv1,
+        getEngines : enginesv1,
+        getActivities : activitiesv1
+    }
+};
+
+router.get('/api/getapptoken', function (req, res) {
+    if(!req.query.client_id) {
+        res.status(400).end();
+        return;
+    }
+    if(!req.query.client_secret) {
+        res.status(400).end();
+        return;
+    }
+    if(!req.query.token) {
+        res.status(400).end();
+        return;
+    }
+    if(!req.query.environment) {
+        res.status(400).end();
+        return;
+    }
+
+    let api_collection = apis[req.query.environment];
+
+    if(!api_collection) {
+        res.status(400).end();
+        return;
+    }
+
+    api_collection.gettoken(req,res);
+
+
+});
+
+
+router.get('/api/getengines', function (req, res) {
+
+    if(!req.headers.environment) {
+        res.status(400).end();
+        return;
+    }
+
+    let api_collection = apis[req.headers.environment];
+
+    if(!api_collection) {
+        res.status(400).end();
+        return;
+    }
+
+    api_collection.getEngines(req,res);
+
+
+
+});
+
+
+router.get('/api/getapplications', function (req, res) {
+
+    if(!req.headers.environment) {
+        res.status(400).end();
+        return;
+    }
+
+    let api_collection = apis[req.headers.environment];
+
+    if(!api_collection) {
+        res.status(400).end();
+        return;
+    }
+
+    api_collection.getApps(req,res);
+
+});
+
+
+
+router.get('/api/getactivities', function (req, res) {
+
+
+    if(!req.headers.environment) {
+        res.status(400).end();
+        return;
+    }
+
+    let api_collection = apis[req.headers.environment];
+
+    if(!api_collection) {
+        res.status(400).end();
+        return;
+    }
+
+    api_collection.getActivities(req,res);
+
 });
 module.exports = router;
