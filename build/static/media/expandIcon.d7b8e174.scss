@@ -1,0 +1,21 @@
+@import '~@adsk/bim360-matrix-bootstrap-sass/src/variables/colors';
+
+.ExpandIcon {
+  display: inline-block;
+  outline: none;
+  color: $bim-gray-darker;
+  width: 16px;
+  min-width: 16px;
+  height: 16px;
+
+  &__icon {
+    display: block;
+    cursor: pointer;
+    transform: rotate(-90deg);
+    transition: transform 0.15s linear;
+  }
+
+  &--expanded &__icon {
+    transform: rotate(0deg);
+  }
+}

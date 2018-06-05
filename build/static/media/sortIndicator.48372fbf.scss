@@ -1,0 +1,11 @@
+.SortIndicator {
+  width: 16px;
+  min-width: 16px;
+  height: 16px;
+  transform: rotate(180deg);
+  transition: transform 0.15s linear;
+
+  &--descending {
+    transform: rotate(0deg);
+  }
+}
