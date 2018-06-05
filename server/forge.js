@@ -76,7 +76,7 @@ router.get('/api/getapptoken', function (req, res) {
         res.status(200).end(auth.access_token);
     })
     .catch(function (err) {
-            console.log(err);
+            console.log(err.message);
             res.status(400).end(JSON.stringify(err));
     });
 });
@@ -137,7 +137,7 @@ router.get('/api/getengines', function (req, res) {
             res.status(200).end(JSON.stringify(response));
         })
         .catch(function (err) {
-            console.log(err);
+            console.log(err.message);
             res.status(400).end(JSON.stringify(err));
         });
 });
@@ -198,7 +198,7 @@ router.get('/api/getapplications', function (req, res) {
             res.status(200).end(JSON.stringify(response));
         })
         .catch(function (err) {
-            console.log(err);
+            console.log(err.message);
             res.status(400).end(JSON.stringify(err));
         });
 });
@@ -255,7 +255,7 @@ router.get('/api/getactivities', function (req, res) {
             res.status(200).end(JSON.stringify(response));
         })
         .catch(function (err) {
-            console.log(err);
+            console.log(err.message);
             res.status(400).end(JSON.stringify(err));
         });
 });

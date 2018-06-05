@@ -1,14 +1,18 @@
 /*global Props*/ // eslint-disable-line no-unused-vars
 // @flow
 import React, { Component } from 'react';
-import { Table ,
+import {
     ActionBar,
     ActionBarGroup,
     IconButton
 } from 'hig-react';
 import 'hig-react/lib/hig-react.css';
 import Section from './Section';
-import GetAppCredentials from './getappcredentials'
+import GetAppCredentials from './getappcredentials';
+
+import { AutoResizer}  from '@hig/table';
+import '@hig/table/build/index.css';
+import MatrixTable  from './MatrixTable/MatrixTable';
 
 type Props = {
     applications?: Array,
@@ -31,19 +35,11 @@ class ApplicationKeys extends Component<Props> {
     }
 
     static getDerivedStateFromProps(props, current_state) {
-/*
-        console.log('Props (key)');
-        console.log(props);
-        console.log('Current state (keys)');
-        console.log(current_state);*/
+
         let newState =
             Object.assign({current_state,
                 data : getApplicationTableData(props)
             });
-/*        console.log('New state (keys)');
-        console.log(newState);*/
-
-
         return newState;
     }
 
@@ -63,40 +59,28 @@ class ApplicationKeys extends Component<Props> {
 
     remove_applications() {
 
-        this.state.data.forEach( (key)=> {
+        if(this.state.selectedKeys >= 1) {
 
-            if(key.selected) {
-                console.log("delete: " + key.client_id);
-                this.props.remove_application(key.client_id);
-            }
-        });
+            this.state.selectedKeys.forEach( (key)=> {
+
+                    console.log("delete: " + this.props.applications[key].client_id);
+                    this.props.remove_application(this.props.applications[key].client_id);
+            });
+
+
+        }
 
     }
 
-
-
-    onSelectionChange = selectedInfo => {
-        const updatedData = this.state.data.map(row => ({
-            ...row,
-            selected: selectedInfo.selected
-        }));
-        this.setState({ data: updatedData });
+    onSelectionChange = selectedKeys => {
+        console.log(selectedKeys);
+        this.setState({ selectedKeys: selectedKeys });
     };
-
-    checkboxHandler = selectedInfo => {
-        const existingData = this.state.data;
-        const selectedIndex = existingData.findIndex(
-            row => row.id === selectedInfo.id
-        );
-        existingData[selectedIndex].selected = selectedInfo.selected;
-        this.setState({ data: existingData });
-    };
-
 
     render() {
         return (
             <Section>
-                <div style={{ minWidth: '1024px' }}>
+                <div>
 
                     {
                         this.state.mode === 'list' &&
@@ -107,36 +91,37 @@ class ApplicationKeys extends Component<Props> {
                                     <IconButton icon="trash" title="delete" type="flat" onClick={() => this.remove_applications() }/>
                                 </ActionBarGroup>
                             </ActionBar>
-                            <Table
-                                density='standard'
-                                onRowSelectionChange={this.checkboxHandler}
-                                onSelectAllSelectionChange={this.onSelectionChange}
-                                selectable
-                                columns={[
-                                    {
-                                        id: '1',
-                                        HeaderCell: 'Name',
-                                        alignment: 'left',
-                                        width: '1fr',
-                                        accessor: 'name'
-                                    },
-                                    {
-                                        id: '2',
-                                        HeaderCell: 'Client ID',
-                                        alignment: 'left',
-                                        width: '1fr',
-                                        accessor: 'client_id'
-                                    },
-                                    {
-                                        id: '3',
-                                        HeaderCell: 'Environment',
-                                        alignment: 'left',
-                                        width: '1fr',
-                                        accessor: 'environment'
-                                    }
-                                ]}
-                                data={this.state.data}
-                            />
+                            <AutoResizer onResize={this.onResize} height={600}>
+                                {({width, height}) => (
+                                    <MatrixTable
+                                        width={width}
+                                        height={height}
+                                        onSelectedRowsChange={this.onSelectionChange}
+                                        selectable
+                                        columns={[
+                                            {
+                                                key: '1',
+                                                title: 'Name',
+                                                width: 300,
+                                                dataKey: 'name'
+                                            },
+                                            {
+                                                key: '2',
+                                                title: 'Client ID',
+                                                width: 300,
+                                                dataKey: 'client_id'
+                                            },
+                                            {
+                                                key: '3',
+                                                title: 'Environment',
+                                                width: 300,
+                                                dataKey: 'environment'
+                                            }
+                                        ]}
+                                        data={this.state.data}
+                                    />
+                                )}
+                            </AutoResizer>
                         </div>
                     }
                     {

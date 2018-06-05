@@ -1,9 +1,13 @@
 /*global Props*/ // eslint-disable-line no-unused-vars
 // @flow
 import React, { Component } from 'react';
-import { Table, Toast, ProgressRing } from 'hig-react';
+import { Toast, ProgressRing } from 'hig-react';
 import 'hig-react/lib/hig-react.css';
 import Section from './Section';
+
+import { AutoResizer}  from '@hig/table';
+import '@hig/table/build/index.css';
+import MatrixTable  from './MatrixTable/MatrixTable';
 
 type Props = {
     engines?: Array,
@@ -35,50 +39,55 @@ class EngineList extends Component<Props> {
                 <div>
                     {this.props.fetchFailure &&
                     <Toast status={'danger'}>
-                        Error retrieving Design Automation data
+                        {this.props.error}
                     </Toast>
                     }
                 </div>
                 <div>
-                    {this.props.fetching &&
+                    {(this.props.fetching && !this.props.fetchFailure) &&
                     <ProgressRing size='m'/>
                     }
                 </div>
-                <div style={{ minWidth: '1024px' }}>
-                    <Table
-                        density='compressed'
-                        columns={[
-                            {
-                                id: '1',
-                                HeaderCell: 'ID',
-                                alignment: 'left',
-                                width: '1fr',
-                                accessor: 'id'
-                            },
-                            {
-                                id: '2',
-                                HeaderCell: 'Description',
-                                alignment: 'left',
-                                width: '1fr',
-                                accessor: 'description'
-                            },
-                            {
-                                id: '3',
-                                HeaderCell: 'Product Version',
-                                alignment: 'left',
-                                width: '1fr',
-                                accessor: 'productVersion'
-                            },
-                            {
-                                id: '4',
-                                HeaderCell: 'Engine Version',
-                                alignment: 'left',
-                                width: '1fr',
-                                accessor: 'version',
-                            }
-                        ]}
-                        data={this.props.engines}
-                    />
+                <div>
+                    {!this.props.fetching &&
+                    <AutoResizer onResize = {this.onResize}  height={600}>
+                        {({ width, height }) => (
+                            <MatrixTable
+                                width={width}
+                                height={height}
+                                columns={[
+                                    {
+                                        key: '1',
+                                        title: 'ID',
+                                        width: 250,
+                                        dataKey: 'id'
+                                    },
+                                    {
+                                        key: '2',
+                                        title: 'Description',
+                                        width: 350,
+                                        dataKey: 'description'
+                                    },
+                                    {
+                                        key: '3',
+                                        title: 'Product Version',
+                                        alignment: 'left',
+                                        width: 100,
+                                        dataKey: 'productVersion'
+                                    },
+                                    {
+                                        key: '4',
+                                        title: 'Engine Version',
+                                        alignment: 'left',
+                                        width: 100,
+                                        dataKey: 'version',
+                                    }
+                                ]}
+                                data={this.props.engines}
+                            />)
+                        }
+                    </AutoResizer>
+                    }
                 </div>
             </Section>
         );

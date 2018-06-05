@@ -1,9 +1,12 @@
 /*global Props*/ // eslint-disable-line no-unused-vars
 // @flow
 import React, { Component } from 'react';
-import { Table} from 'hig-react';
 import 'hig-react/lib/hig-react.css';
 import Section from './Section';
+
+import { AutoResizer}  from '@hig/table';
+import '@hig/table/build/index.css';
+import MatrixTable  from './MatrixTable/MatrixTable';
 
 type Props = {
 
@@ -19,28 +22,30 @@ class WorkItems extends Component<Props> {
     render() {
         return (
             <Section>
-                <div style={{ minWidth: '1024px' }}>
-                    <Table
-                        density='standard'
-                        columns={[
-                            {
-                                id: '1',
-                                HeaderCell: 'ID',
-                                alignment: 'left',
-                                width: '1fr',
-                                accessor: 'id'
-                            },
-                            {
-                                id: '2',
-                                HeaderCell: 'Description',
-                                alignment: 'left',
-                                width: '1fr',
-                                accessor: 'description'
-                            }
-                        ]}
-                        data={[]}
-                    />
-                </div>
+                <AutoResizer onResize = {this.onResize}  height={600}>
+                    {({ width, height }) => (
+                        <MatrixTable
+                            width={width}
+                            height={height}
+                            columns={[
+                                {
+                                    key: '1',
+                                    title: 'ID',
+                                    alignment: 'left',
+                                    width: 100,
+                                    dataKey: 'id'
+                                },
+                                {
+                                    key: '2',
+                                    title: 'Description',
+                                    width: 100,
+                                    dataKey: 'description'
+                                }
+                            ]}
+                            data={[]}
+                        />
+                        )}
+                </AutoResizer>
             </Section>
         );
     }

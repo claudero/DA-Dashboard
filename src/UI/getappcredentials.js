@@ -26,7 +26,6 @@ class GetAppCredentials extends Component<Props> {
     }
 
     static getDerivedStateFromProps(props, current_state) {
-        console.log(current_state);
         return {
             client_id : current_state.client_id ,
             failed : current_state.failed,

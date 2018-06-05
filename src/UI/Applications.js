@@ -1,9 +1,13 @@
 /*global Props*/ // eslint-disable-line no-unused-vars
 // @flow
 import React, { Component } from 'react';
-import { Table, Toast, ProgressRing } from 'hig-react';
+import { Toast, ProgressRing } from 'hig-react';
 import 'hig-react/lib/hig-react.css';
 import Section from './Section';
+import { AutoResizer}  from '@hig/table';
+import '@hig/table/build/index.css';
+import MatrixTable  from './MatrixTable/MatrixTable';
+
 
 type Props = {
     applications?: Array,
@@ -33,9 +37,9 @@ class ApplicationList extends Component<Props> {
         return (
             <Section>
                 <div>
-                    {this.state.failed &&
+                    {this.props.fetchFailure &&
                     <Toast status={'danger'}>
-                        Error retrieving Design Automation data
+                        {this.props.error}
                     </Toast>
                     }
                 </div>
@@ -44,41 +48,44 @@ class ApplicationList extends Component<Props> {
                     <ProgressRing size='m'/>
                     }
                 </div>
-                <div style={{ minWidth: '1024px' }}>
-                    <Table
-                        density='compressed'
-                        columns={[
-                            {
-                                id: '1',
-                                HeaderCell: 'ID',
-                                alignment: 'left',
-                                width: '1fr',
-                                accessor: 'id'
-                            },
-                            {
-                                id: '2',
-                                HeaderCell: 'Description',
-                                alignment: 'left',
-                                width: '1fr',
-                                accessor: 'description'
-                            },
-                            {
-                                id: '3',
-                                HeaderCell: 'Engine',
-                                alignment: 'left',
-                                width: '1fr',
-                                accessor: 'engine'
-                            },
-                            {
-                                id: '4',
-                                HeaderCell: 'Version',
-                                alignment: 'left',
-                                width: '1fr',
-                                accessor: 'version',
-                            }
-                        ]}
-                        data={this.props.applications}
-                    />
+                <div>
+                    {(!this.props.fetching && !this.props.fetchFailure) &&
+                    <AutoResizer onResize={this.onResize} height={600}>
+                        {({width, height}) => (
+                            <MatrixTable
+                                width={width}
+                                height={height}
+                                columns={[
+                                    {
+                                        key: '1',
+                                        title: 'ID',
+                                        width: 200,
+                                        dataKey: 'id'
+                                    },
+                                    {
+                                        key: '2',
+                                        title: 'Description',
+                                        width: 200,
+                                        dataKey: 'description'
+                                    },
+                                    {
+                                        key: '3',
+                                        title: 'Engine',
+                                        width: 200,
+                                        dataKey: 'engine'
+                                    },
+                                    {
+                                        key: '4',
+                                        title: 'Version',
+                                        alignment: 'left',
+                                        width: 100,
+                                        dataKey: 'version',
+                                    }
+                                ]}
+                                data={this.props.applications}/>
+                        )}
+                    </AutoResizer>
+                    }
                 </div>
             </Section>
         );

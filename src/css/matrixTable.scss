@@ -1,0 +1,63 @@
+@import '~@adsk/bim360-matrix-bootstrap-sass/src/variables/_colors';
+@import '~@adsk/bim360-matrix-bootstrap-sass/src/variables/_fonts';
+
+.BaseTable__container {
+  // override default variables for BaseTable
+  $table-prefix: BaseTable;
+
+  $table-font-size: $bim-font-size-small;
+  $table-border-radius: 4px;
+  $table-padding-left: 15px;
+  $table-padding-right: 15px;
+  $column-padding: 7.5px;
+
+  $background-color: $bim-white;
+  $box-shadow-color: rgba($bim-gray-dark, 0.19);
+  $border: 1px solid $bim-gray-lighter;
+  $header-background-color: $bim-gray-lightest;
+  $header-font-weight: $bim-font-weight-bold;
+  $row-hovered-background-color: #f2f4f5; // rgba($bim-gray-lighter, 0.75)
+  $header-column-hovered-background-color: rgba($bim-gray-lighter, 0.75);
+  $sort-indicator-hovered-color: $bim-gray-dark;
+  $column-resizer-color: $bim-gray;
+
+  $show-frozen-rows-shadow: true;
+  $show-frozen-columns-shadow: true;
+
+  @import '~@adsk/react-base-table/es/_BaseTable.scss';
+
+  .BaseTable {
+    &__settings-icon {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      line-height: 1;
+    }
+
+    &__row--selected {
+      &,
+      &:hover {
+        background-color: $bim-blue-attention;
+      }
+    }
+
+    &__cell {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &__cell-popover {
+      background-color: rgba($bim-primary, 0.9);
+      padding: 2px 7px;
+      font-size: $bim-font-size-x-small;
+      color: $bim-white;
+      border: 0;
+      border-radius: 3px;
+      box-shadow: none;
+
+      .Popover__container-arrow {
+        border-color: transparent transparent rgba($bim-primary, 0.9) rgba($bim-primary, 0.9);
+      }
+    }
+  }
+}

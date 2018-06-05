@@ -35,8 +35,9 @@ const mapAppDispatchToProps = (dispatch) => {
 const mapEngineStateToProps = (state) => {
     return {
         engines : state.engines.list,
+        fetchFailure : state.engines.error,
         fetching : state.engines.loading,
-        error: state.engines.error,
+        error: (state.engines.error && state.engines.error.message)?state.engines.error.message:'Unknown error',
         loaded : state.engines.loaded,
         token : state.app_keys.token
     };
@@ -49,8 +50,9 @@ const mapEngineDispatchToProps = (dispatch) => {
 const mapActivityStateToProps = (state) => {
     return {
         activities : state.activities.list,
+        fetchFailure : state.activities.error,
         fetching : state.activities.loading,
-        error: state.activities.error,
+        error: (state.activities.error && state.activities.error.message)?state.activities.error.message:'Unknown error',
         loaded : state.activities.loaded,
         token : state.app_keys.token
     };
@@ -63,8 +65,9 @@ const mapActivityDispatchToProps = (dispatch) => {
 const mapApplicationStateToProps = (state) => {
     return {
         applications : state.applications.list,
+        fetchFailure : state.applications.error,
         fetching : state.applications.loading,
-        error: state.applications.error,
+        error: (state.applications.error && state.applications.error.message)?state.applications.error.message:'Unknown error',
         loaded : state.applications.loaded,
         token : state.app_keys.token
     };

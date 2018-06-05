@@ -1,0 +1,79 @@
+@import '~@adsk/bim360-matrix-bootstrap-sass/src/variables/colors';
+
+@mixin selection-checked($color) {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 5px;
+  background: transparent;
+  top: 4px;
+  left: 3px;
+  border: 2px solid $color;
+  border-top: none;
+  border-right: none;
+  transform: rotate(-45deg);
+}
+
+@mixin selection-indeterminate($color) {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 2px;
+  background: $color;
+  top: 6px;
+  left: 2px;
+  border: none;
+  transform: none;
+}
+
+.SelectionBox {
+  display: inline-block;
+  width: 16px;
+  min-width: 16px;
+  height: 16px;
+  border: 1px solid $bim-gray-dark;
+  border-radius: 2px;
+  background-color: $bim-white;
+  position: relative;
+  cursor: pointer;
+
+  &--checked {
+    &.SelectionBox--disabled {
+      &:after {
+        @include selection-checked($bim-gray);
+      }
+    }
+
+    &:not(.SelectionBox--disabled) {
+      border: 1px solid $bim-accent;
+      background-color: $bim-accent;
+
+      &:after {
+        @include selection-checked($bim-white);
+      }
+    }
+  }
+
+  &--indeterminate {
+    &.SelectionBox--disabled {
+      &:after {
+        @include selection-indeterminate($bim-gray);
+      }
+    }
+
+    &:not(.SelectionBox--disabled) {
+      border: 1px solid $bim-accent;
+      background-color: $bim-accent;
+
+      &:after {
+        @include selection-indeterminate($bim-white);
+      }
+    }
+  }
+
+  &--disabled {
+    cursor: default;
+    border: 1px solid $bim-gray;
+    background-color: $bim-gray-lighter;
+  }
+}
