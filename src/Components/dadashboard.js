@@ -13,7 +13,8 @@ import { fetch_engines } from '../actions/actions_engines';
 import { fetch_activities } from '../actions/actions_activities';
 import { fetch_applications } from '../actions/actions_applications';
 import { add_key, set_current_api_key, remove_key } from '../actions/actions_token';
-import logo from "../images/logo.png";
+import { submit_workitem, remove_workitem, fetch_workitems } from '../actions/actions_workitems';
+import logo from '../images/logo.png';
 import { connect} from 'react-redux';
 
 
@@ -26,7 +27,7 @@ const mapAppStateToProps = (state) => {
 
 const mapAppDispatchToProps = (dispatch) => {
     return {
-        add_application : (n, c, s, e) => {dispatch(add_key(n,c,s,e))},
+        add_application : (n, c, s, e) => dispatch(add_key(n,c,s,e)),
         set_current_api_key : (c) => dispatch(set_current_api_key(c)),
         remove_application :  (c) => dispatch(remove_key(c))
     };
@@ -78,10 +79,34 @@ const mapApplicationDispatchToProps = (dispatch) => {
     };
 };
 
+const mapWorkitemStateToProps = (state) => {
+    return {
+        workitems : state.workitems.list,
+        activities : state.activities.list,
+        client_id : state.app_keys.currentApp,
+        activities_fetching : state.activities.loading,
+        activities_error: state.activities.error,
+        activities_loaded : state.activities.loaded,
+        token : state.app_keys.token
+    };
+};
+
+const mapWorkitemDispatchToProps = (dispatch) => {
+    return {
+        submit_workitem : (l, c, p) => dispatch(submit_workitem(l, c, p)),
+        remove_workitem : (guid) => dispatch(remove_workitem(guid)),
+        activities_fetch : () => dispatch(fetch_activities()),
+        fetch_workitems : () => dispatch(fetch_workitems())
+    };
+};
+
+
+
 const ApplicationKeysContainer = connect(mapAppStateToProps,mapAppDispatchToProps)(ApplicationKeys);
 const EngineContainer = connect(mapEngineStateToProps, mapEngineDispatchToProps)(Engines);
 const ApplicationContainer = connect(mapApplicationStateToProps, mapApplicationDispatchToProps)(Applications);
 const ActivitiyContainer = connect(mapActivityStateToProps, mapActivityDispatchToProps)(Activities);
+const WorkitemContainer = connect(mapWorkitemStateToProps, mapWorkitemDispatchToProps)(WorkItems);
 
 
 type Props = {
@@ -123,7 +148,7 @@ function getApplicationTableData(props) {
     //console.log(props.applications);
 
     //return props.applications.map( (key)=> { return Object.assign(key, { id : key.client_id, label : key.name, selected : props.current_application===key.client_id});});
-    return props.applications.map( (key)=> { return Object.assign({}, key, { id : key.client_id, label : key.name, selected : props.current_application===key.client_id});});
+    return props.applications.map( (key)=> { return Object.assign({}, key, { id : key.client_id, label : key.name, selected : props.currentApplication===key.client_id});});
 }
 
 
@@ -132,7 +157,7 @@ class DADashboard extends Component<Props> {
     constructor(props) {
         super(props);
         this.state = {
-            navigation : NAV.ENGINES
+            navigation : NAV.WORKITEMS
         };
     }
 
@@ -142,8 +167,9 @@ class DADashboard extends Component<Props> {
         console.log(props);
         console.log('Current state (dashboard)');
         console.log(current_state);*/
+
         let newState =
-            Object.assign({current_state,
+            Object.assign({}, current_state, {
             apps : getApplicationTableData(props)
         });
 /*        console.log('New state (dashboard');
@@ -160,7 +186,7 @@ class DADashboard extends Component<Props> {
     };
 
     projectClicked = id => {
-        console.log("project clicked", id);
+        console.log('project clicked', id);
         this.props.set_current_api_key(id);
     };
 
@@ -221,7 +247,7 @@ class DADashboard extends Component<Props> {
                         }
                         {
                             this.state.navigation === NAV.WORKITEMS &&
-                            <WorkItems/>
+                            <WorkitemContainer/>
                         }
                     </div>
             </GlobalNav>

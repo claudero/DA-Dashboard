@@ -6,11 +6,13 @@ import thunk from 'redux-thunk';
 import reducer from './store/reducer.js';
 import App from './App';
 //import C from './constants'
-import {add_key, reset_app_token, fetch_app_token, set_current_api_key} from './actions/actions_token';
+import {add_key, set_current_api_key} from './actions/actions_token';
+import {add_workitem} from './actions/actions_workitems';
 import registerServiceWorker from './registerServiceWorker';
 
 
-const initialState = (localStorage['redux-store'])?JSON.parse(localStorage['redux-store']):null;
+const initialAppState = (localStorage['design-automation-app-keys'])?JSON.parse(localStorage['design-automation-app-keys']):null;
+const initialWIState = (localStorage['design-automation-workitems'])?JSON.parse(localStorage['design-automation-workitems']):null;
 
 
 const consoleMessage = store => next => action => {
@@ -19,10 +21,7 @@ const consoleMessage = store => next => action => {
 
     console.log(`Payload : ${JSON.stringify(action.payload)}`);
     result = next(action);
-/*
-    let finalState = store.getState();
 
-    console.log(`Store : ${JSON.stringify(finalState)}`);*/
     console.groupEnd();
 
     return result;
@@ -46,20 +45,31 @@ window.store = store;
 
 
 store.subscribe(()=> {
-    const state = JSON.stringify(store.getState().app_keys);
-    localStorage['redux-store'] = state;
+    const app_state = JSON.stringify(store.getState().app_keys);
+    const wi_state = JSON.stringify(store.getState().workitems);
+    localStorage['design-automation-app-keys'] = app_state;
+    localStorage['design-automation-workitems'] = wi_state;
 });
 
 
 
 function init(dispatch) {
-    if(initialState && initialState.list) {
-        initialState.list.map((key) => dispatch(add_key(key.name,key.client_id, key.secret, key.environment)));
+    if(initialAppState && initialAppState.list) {
+        initialAppState.list.forEach((key) => dispatch(add_key(key.name,key.client_id, key.secret, key.environment)));
     }
-    dispatch(reset_app_token());
-    if(initialState.currentApp) {
-        dispatch(set_current_api_key(initialState.currentApp));
-        dispatch(fetch_app_token());
+    if(initialAppState && initialAppState.currentApp) {
+        dispatch(set_current_api_key(initialAppState.currentApp));
+    } else {
+        let apps = store.getState().app_keys;
+        if(apps.list.length) {
+            dispatch(set_current_api_key(apps.list[0].client_id));
+        }
+    }
+
+    if(initialWIState && initialWIState.list) {
+
+        console.log(initialWIState.list);
+        initialWIState.list.forEach((wi) => dispatch(add_workitem(wi.label, wi.client_id, wi.id, wi.payload, wi.da_status)));
     }
 }
 

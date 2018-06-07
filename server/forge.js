@@ -167,6 +167,61 @@ function appsv1(req,res) {
 }
 
 
+function postworkitemv1(req,res) {
+
+
+    let baseUrl = da_environments[req.headers.environment];
+
+    console.log(req.body);
+
+    let wiUrl = {
+        url: baseUrl+ '/workitems',
+        method : 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': req.headers.authorization
+        },
+        body : JSON.stringify(req.body)
+    };
+
+    rp(wiUrl).then(function (response) {
+        let object = JSON.parse(response);
+        console.log(object);
+        res.status(200).end(response);
+    })
+    .catch(function (err) {
+        console.log(err);
+        res.status(400).end(JSON.stringify(err));
+    });
+}
+
+
+function getworkitemv1(req,res) {
+
+    if(!req.params.id) {
+        res.status(400).end();
+        return;
+    }
+
+    let baseUrl = da_environments[req.headers.environment];
+
+    let wiUrl = {
+        url: baseUrl+ '/workitems/' + req.params.id,
+        headers: {
+            'Authorization': req.headers.authorization
+        }
+    };
+
+    rp(wiUrl).then(function (response) {
+        let object = JSON.parse(response);
+        console.log(object);
+        res.status(200).end(response);
+    }).catch(function (err) {
+        console.log(err.message);
+        res.status(400).end(JSON.stringify(err));
+    });
+}
+
 function appsv2(req,res) {
     let response = {
         applications : []
@@ -293,25 +348,33 @@ let apis = {
         gettoken :   tokenv1,
         getApps :   appsv1,
         getEngines : enginesv1,
-        getActivities : activitiesv1
+        getActivities : activitiesv1,
+        postWorkitem : postworkitemv1,
+        getWorkitem : getworkitemv1
     },
     preprod : {
         gettoken :   tokenv1,
         getApps :   appsv1,
         getEngines : enginesv1,
-        getActivities : activitiesv1
+        getActivities : activitiesv1,
+        postWorkitem : postworkitemv1,
+        getWorkitem : getworkitemv1
     },
     stg : {
         gettoken :   tokenv1,
         getApps :   appsv2,
         getEngines : enginesv1,
         getActivities : activitiesv1,
+        postWorkitem : postworkitemv1,
+        getWorkitem : getworkitemv1
     },
     dev : {
         gettoken :   tokenv1,
         getApps :   appsv1,
         getEngines : enginesv1,
-        getActivities : activitiesv1
+        getActivities : activitiesv1,
+        postWorkitem : postworkitemv1,
+        getWorkitem : getworkitemv1
     }
 };
 
@@ -405,4 +468,60 @@ router.get('/api/getactivities', function (req, res) {
     api_collection.getActivities(req,res);
 
 });
+
+
+router.post('/api/workitem', function (req, res) {
+
+
+
+    console.log("workitem!")
+    console.log(req.headers.environment);
+    if(!req.headers.environment) {
+        res.status(400).end();
+        return;
+    }
+
+    let api_collection = apis[req.headers.environment];
+
+    if(!api_collection) {
+        res.status(400).end();
+        return;
+    }
+
+    console.log("workitem! good ")
+
+    api_collection.postWorkitem(req,res);
+
+});
+
+
+router.get('/api/workitem/:id', function (req, res) {
+
+    console.log("get workitem!")
+    console.log(req.params);
+    console.log(req.headers.environment);
+    console.log(req.query);
+
+    if(!req.params.id) {
+        res.status(400).end();
+        return;
+    }
+
+    if(!req.headers.environment) {
+        res.status(400).end();
+        return;
+    }
+
+    let api_collection = apis[req.headers.environment];
+
+    if(!api_collection) {
+        res.status(400).end();
+        return;
+    }
+
+    api_collection.getWorkitem(req,res);
+
+});
+
+
 module.exports = router;

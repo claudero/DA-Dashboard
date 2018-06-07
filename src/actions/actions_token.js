@@ -3,8 +3,9 @@ import fetch from 'isomorphic-fetch';
 
 
 
-export const add_key = (name, client_id, secret, environment) => {
-    return {
+export const add_key = (name, client_id, secret, environment)  => (dispatch) => {
+
+    dispatch({
         type: C.ADD_API_KEY,
         payload: {
             client_id,
@@ -12,7 +13,7 @@ export const add_key = (name, client_id, secret, environment) => {
             name,
             environment
         }
-    };
+    });
 };
 
 export const remove_key = (client_id) => {
@@ -23,11 +24,16 @@ export const remove_key = (client_id) => {
 };
 
 
-export const set_current_api_key = (client_id) => {
-    return {
+export const set_current_api_key = (client_id) => (dispatch, state) => {
+
+    dispatch({
         type: C.SET_CURRENT_API_KEY,
         payload: client_id
-    };
+    });
+
+    dispatch(fetch_app_token());
+
+
 };
 
 
@@ -49,6 +55,10 @@ export const fetch_app_token = () => (dispatch, getState) => {
     let app = app_keys.list.find((key) => key.client_id===app_keys.currentApp);
 
     if(!app) {
+        return;
+    }
+
+    if(app_keys.fetching) {
         return;
     }
 

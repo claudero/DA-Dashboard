@@ -35,7 +35,7 @@ export const apikeys = (state=[], action) => {
 export default (state=initialState, action) => {
     switch(action.type) {
         case C.ADD_API_KEY :
-            return Object.assign({},state, {list : apikeys(state.list, action), currentApp: (state.currentApp===null)? action.payload.client_id:state.currentApp});
+            return Object.assign({},state, {list : apikeys(state.list, action)});
         case C.REMOVE_API_KEY :
             if(action.payload === state.currentApp) {
                 return Object.assign({},state, {list : apikeys(state.list, action), token : null, currentApp : null, fetching : null, error : null, environment : null});

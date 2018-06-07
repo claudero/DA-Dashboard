@@ -16,7 +16,6 @@ type Props = {
     fetch?: Function,
     fetching?: boolean,
     loaded?: boolean,
-
 };
 
 function extractParams(activity) {

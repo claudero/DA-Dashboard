@@ -49,7 +49,6 @@ class App extends Component<Props> {
         this.setState( { playground : true});
     }
 
-
     render() {
         return (
             <div>
