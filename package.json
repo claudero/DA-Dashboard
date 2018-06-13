@@ -25,6 +25,7 @@
     "react-redux": "^5.0.7",
     "react-scripts": "1.0.14",
     "react-test-renderer": "^16.3.2",
+    "recursive-readdir": "^2.2.2",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
     "request-promise": "^4.2.2"
@@ -39,9 +40,10 @@
     "build-css": "node-sass-chokidar --importer=node_modules/node-sass-tilde-importer src/ -o src/",
     "watch-css": "npm run build-css && node-sass-chokidar --importer=node_modules/node-sass-tilde-importer src/ -o src/ --watch --recursive",
     "start-js": "set PORT=3001 && react-scripts start",
+    "start-react": "npm-run-all -p watch-css start-js",
     "start-dev": "npm-run-all -p watch-css start-js start",
     "start-server": "node start_server.js",
-    "start": "node start_server.js",
+    "start": "nodemon start_server.js",
     "build-js": "react-scripts build",
     "build": "npm-run-all build-css build-js",
     "flow": "flow",
@@ -57,12 +59,14 @@
   "devDependencies": {
     "@adsk/bim360-matrix-bootstrap-sass": "^1.5.1",
     "@adsk/react-base-table": "^1.0.0-alpha.8d95da5a",
+    "nodemon": "^1.17.5",
     "@storybook/addon-actions": "^3.2.11",
     "@storybook/addon-knobs": "^3.2.10",
     "@storybook/addon-links": "^3.2.10",
     "@storybook/addon-storyshots": "^3.2.11",
     "@storybook/react": "^3.2.11",
     "babel-eslint": "^8.0.3",
+    "commander-plus": "^0.0.6",
     "eslint": "^3.19.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-plugin-flowtype": "^2.39.1",
@@ -71,6 +75,7 @@
     "eslint-plugin-node": "^4.2.2",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-react": "^7.5.1",
-    "eslint-plugin-standard": "^3.0.1"
+    "eslint-plugin-standard": "^3.0.1",
+    "forge-apis": "^0.4.1"
   }
 }

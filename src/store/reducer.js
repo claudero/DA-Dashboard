@@ -3,6 +3,7 @@ import activities from './reducers_activities'
 import apps from './reducers_apps'
 import engines from './reducers_engines'
 import workitems from './reducers_workitems'
+import oss_storage from './reducers_oss_storage'
 import { combineReducers } from 'redux';
 
 
@@ -12,6 +13,7 @@ export default combineReducers({
     activities,
     engines,
     applications : apps,
-    workitems
+    workitems,
+    oss_storage
 });
 

@@ -8,15 +8,34 @@ import Engines from '../UI/Engines';
 import WorkItems from '../UI/WorkItems';
 import ApplicationKeys from '../UI/ApplicationKeys';
 import Activities from '../UI/Activities';
+import OssStorage from '../UI/OssStorage';
 import { GlobalNav, Toast} from 'hig-react';
 import { fetch_engines } from '../actions/actions_engines';
 import { fetch_activities } from '../actions/actions_activities';
 import { fetch_applications } from '../actions/actions_applications';
 import { add_key, set_current_api_key, remove_key } from '../actions/actions_token';
 import { submit_workitem, remove_workitem, fetch_workitems } from '../actions/actions_workitems';
+import { fetch_buckets, fetch_objects } from '../actions/actions_buckets';
 import logo from '../images/logo.png';
 import { connect} from 'react-redux';
 
+
+const mapOssStorageStateToProps = (state) => {
+    return {
+        buckets : state.oss_storage.list,
+        fetchFailure : state.oss_storage.error,
+        fetching : state.oss_storage.loading,
+        error: (state.oss_storage.error && state.oss_storage.error.message)?state.oss_storage.error.message:'Unknown error',
+        loaded : state.oss_storage.loaded,
+        token : state.app_keys.token
+    };
+};
+const mapOssStorageDispatchToProps = (dispatch) => {
+    return {
+        fetch_buckets : () => dispatch(fetch_buckets()),
+        fetch_objects : (bucket) => dispatch(fetch_objects(bucket))
+    };
+};
 
 const mapAppStateToProps = (state) => {
     return {
@@ -107,6 +126,7 @@ const EngineContainer = connect(mapEngineStateToProps, mapEngineDispatchToProps)
 const ApplicationContainer = connect(mapApplicationStateToProps, mapApplicationDispatchToProps)(Applications);
 const ActivitiyContainer = connect(mapActivityStateToProps, mapActivityDispatchToProps)(Activities);
 const WorkitemContainer = connect(mapWorkitemStateToProps, mapWorkitemDispatchToProps)(WorkItems);
+const OssStorageContainer = connect(mapOssStorageStateToProps, mapOssStorageDispatchToProps)(OssStorage);
 
 
 type Props = {
@@ -118,10 +138,11 @@ type Props = {
 };
 
 const NAV = {
-    COMPONENTS : 'COMPONENTS',
+    DESIGN_AUTOMATION : 'DESIGN_AUTOMATION',
     APPLICATION_KEYS : 'APPLICATION_KEYS',
     WORKITEMS : 'WORKITEMS',
     PLAYGROUND : 'PLAYGROUND',
+    STORAGE : 'STORAGE',
     ENGINES : 'ENGINES',
     APPLICATIONS : 'APPLICATIONS',
     ACTIVITIES : 'ACTIVITIES'
@@ -129,16 +150,17 @@ const NAV = {
 
 
 const modules = [
-    { id: NAV.COMPONENTS, title: 'Components', icon: 'settings' },
-    { id: NAV.APPLICATION_KEYS, title: 'Application Keys', icon: 'assets' },
-    { id: NAV.WORKITEMS, title: 'Workitems', icon: 'assets' },
-    { id: NAV.PLAYGROUND, title: 'Playground', icon: 'assets' },
+    { id: NAV.DESIGN_AUTOMATION, title: 'Design Automation', icon: 'settings' },
+    { id: NAV.STORAGE, title: 'Storage', icon: 'archive' },
+    { id: NAV.APPLICATION_KEYS, title: 'Application Keys', icon: 'settings' },
+    { id: NAV.PLAYGROUND, title: 'Playground', icon: 'visible' },
 ];
 
 const submodules = [
-        { moduleId: NAV.COMPONENTS, id: NAV.ENGINES, title: 'Engines' },
-        { moduleId: NAV.COMPONENTS, id: NAV.APPLICATIONS, title: 'Apps' },
-        { moduleId: NAV.COMPONENTS, id: NAV.ACTIVITIES, title: 'Activities' }
+        { moduleId: NAV.DESIGN_AUTOMATION, id: NAV.WORKITEMS, title: 'Workitems' },
+        { moduleId: NAV.DESIGN_AUTOMATION, id: NAV.ENGINES, title: 'Engines' },
+        { moduleId: NAV.DESIGN_AUTOMATION, id: NAV.APPLICATIONS, title: 'Bundles' },
+        { moduleId: NAV.DESIGN_AUTOMATION, id: NAV.ACTIVITIES, title: 'Activities' }
     ];
 
 
@@ -157,23 +179,16 @@ class DADashboard extends Component<Props> {
     constructor(props) {
         super(props);
         this.state = {
-            navigation : NAV.WORKITEMS
+            navigation : NAV.DESIGN_AUTOMATION
         };
     }
 
     static getDerivedStateFromProps(props, current_state) {
 
-/*        console.log('Props (dashboard)');
-        console.log(props);
-        console.log('Current state (dashboard)');
-        console.log(current_state);*/
-
         let newState =
             Object.assign({}, current_state, {
             apps : getApplicationTableData(props)
         });
-/*        console.log('New state (dashboard');
-        console.log(newState);*/
 
         return newState;
     }
@@ -196,7 +211,7 @@ class DADashboard extends Component<Props> {
                         submodules={submodules}
                         sideNav={{
                             superHeaderLabel: 'Autodesk',
-                            headerLabel: 'Design Automation Console'
+                            headerLabel: 'Forge Console'
                         }}
                         sideNavOpen= {true}
                         showSubNav={true}
@@ -234,7 +249,7 @@ class DADashboard extends Component<Props> {
                             <ApplicationKeysContainer/>
                         }
                         {
-                            (this.state.navigation === NAV.ENGINES || this.state.nav === NAV.COMPONENTS) &&
+                            (this.state.navigation === NAV.ENGINES) &&
                             <EngineContainer/>
                         }
                         {
@@ -246,8 +261,12 @@ class DADashboard extends Component<Props> {
                             <ApplicationContainer/>
                         }
                         {
-                            this.state.navigation === NAV.WORKITEMS &&
+                            (this.state.navigation === NAV.WORKITEMS || this.state.navigation === NAV.DESIGN_AUTOMATION) &&
                             <WorkitemContainer/>
+                        }
+                        {
+                            this.state.navigation === NAV.STORAGE &&
+                            <OssStorageContainer/>
                         }
                     </div>
             </GlobalNav>

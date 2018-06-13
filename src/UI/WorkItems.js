@@ -26,10 +26,6 @@ type Props = {
     activities_fetch?: Function
 };
 
-function getWorkItemTableData(props) {
-    return props.workitems.map( (key)=> { return Object.assign({}, key, { id : key.guid});});
-}
-
 class WorkItems extends Component<Props> {
 
     constructor(props) {

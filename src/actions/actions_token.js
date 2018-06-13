@@ -24,7 +24,7 @@ export const remove_key = (client_id) => {
 };
 
 
-export const set_current_api_key = (client_id) => (dispatch, state) => {
+export const set_current_api_key = (client_id) => (dispatch) => {
 
     dispatch({
         type: C.SET_CURRENT_API_KEY,
@@ -32,8 +32,6 @@ export const set_current_api_key = (client_id) => (dispatch, state) => {
     });
 
     dispatch(fetch_app_token());
-
-
 };
 
 
