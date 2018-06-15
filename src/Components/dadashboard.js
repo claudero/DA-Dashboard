@@ -11,7 +11,7 @@ import Activities from '../UI/Activities';
 import OssStorage from '../UI/OssStorage';
 import { GlobalNav, Toast} from 'hig-react';
 import { fetch_engines } from '../actions/actions_engines';
-import { fetch_activities } from '../actions/actions_activities';
+import { fetch_activities, submit_activity, remove_activity } from '../actions/actions_activities';
 import { fetch_applications } from '../actions/actions_applications';
 import { add_key, set_current_api_key, remove_key } from '../actions/actions_token';
 import { submit_workitem, remove_workitem, fetch_workitems } from '../actions/actions_workitems';
@@ -69,17 +69,18 @@ const mapEngineDispatchToProps = (dispatch) => {
 };
 const mapActivityStateToProps = (state) => {
     return {
-        activities : state.activities.list,
-        fetchFailure : state.activities.error,
-        fetching : state.activities.loading,
-        error: (state.activities.error && state.activities.error.message)?state.activities.error.message:'Unknown error',
-        loaded : state.activities.loaded,
+        activities : state.activities,
+        engines : state.engines,
+        applications : state.applications,
         token : state.app_keys.token
     };
 };
 const mapActivityDispatchToProps = (dispatch) => {
     return {
-        fetch : () => dispatch(fetch_activities())
+        fetch_activities : () => dispatch(fetch_activities()),
+        fetch_applications : () => dispatch(fetch_applications()),
+        fetch_engines : () => dispatch(fetch_engines()),
+        submit_activity : (payload) => dispatch(submit_activity(payload))
     };
 };
 const mapApplicationStateToProps = (state) => {

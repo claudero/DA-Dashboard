@@ -8,7 +8,7 @@ import { ActionBar,
 
 import 'hig-react/lib/hig-react.css';
 import Section from './Section';
-import CreateWorkitem from './createworkitem'
+import CreateWorkitem from './createworkitem';
 import { AutoResizer}  from '@hig/table';
 import '@hig/table/build/index.css';
 import MatrixTable  from './MatrixTable/MatrixTable';
@@ -87,7 +87,7 @@ class WorkItems extends Component<Props> {
             }
             return {
                 name : a[0],
-                timing : (x==0)? a[1]: ((Date.parse(a[1]) - startTime)/1000)
+                timing : (x===0)? a[1]: ((Date.parse(a[1]) - startTime)/1000)
             };
         });
 

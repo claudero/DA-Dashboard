@@ -64,3 +64,10 @@ export const fetch_activities = () => (dispatch, getState) => {
     });
 };
 
+
+export const submit_activity = (payload) => {
+
+    return {
+        type: C.RESET_ACTIVITIES,
+    };
+};
