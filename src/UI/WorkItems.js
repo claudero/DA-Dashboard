@@ -110,7 +110,7 @@ class WorkItems extends Component<Props> {
                                 <ActionBarGroup>
                                     <IconButton icon="add" title="add" type="flat"
                                                 onClick={() => this.start_add_workitem()}/>
-                                    <IconButton icon="trash" title="delete" type="flat"
+                                    <IconButton icon="trash" title="delete" type="flat" disabled={!this.state.currentWorkitem}
                                                 onClick={() => this.remove_workitem()}/>
                                 </ActionBarGroup>
                             </ActionBar>

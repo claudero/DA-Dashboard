@@ -59,7 +59,7 @@ class ApplicationKeys extends Component<Props> {
 
     remove_applications() {
 
-        if(this.state.selectedKeys >= 1) {
+        if(this.state.selectedKeys && this.state.selectedKeys.length >= 1) {
 
             this.state.selectedKeys.forEach( (key)=> {
 
@@ -88,7 +88,7 @@ class ApplicationKeys extends Component<Props> {
                             <ActionBar>
                                 <ActionBarGroup>
                                     <IconButton icon="add" title="add" type="flat" onClick={() => this.add_credentials() }/>
-                                    <IconButton icon="trash" title="delete" type="flat" onClick={() => this.remove_applications() }/>
+                                    <IconButton icon="trash" title="delete" type="flat" disabled={!(this.state.selectedKeys &&this.state.selectedKeys.length >= 1)} onClick={() => this.remove_applications() }/>
                                 </ActionBarGroup>
                             </ActionBar>
                             <AutoResizer onResize={this.onResize} height={600}>

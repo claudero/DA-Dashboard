@@ -78,7 +78,7 @@ router.get('/api/getapplications', function (req, res) {
 
 
 
-router.get('/api/getactivities', function (req, res) {
+router.get('/api/activities', function (req, res) {
 
 
     if(!req.headers.environment) {
@@ -97,13 +97,9 @@ router.get('/api/getactivities', function (req, res) {
 
 });
 
-
-router.post('/api/workitem', function (req, res) {
-
+router.post('/api/activities', function (req, res) {
 
 
-    console.log("workitem!")
-    console.log(req.headers.environment);
     if(!req.headers.environment) {
         res.status(400).end();
         return;
@@ -116,7 +112,44 @@ router.post('/api/workitem', function (req, res) {
         return;
     }
 
-    console.log("workitem! good ")
+    api_collection.createActivity(req,res);
+
+});
+
+router.delete('/api/activities/:id', function (req, res) {
+
+
+    if(!req.headers.environment) {
+        res.status(400).end();
+        return;
+    }
+
+    let api_collection = da_apis[req.headers.environment];
+
+    if(!api_collection) {
+        res.status(400).end();
+        return;
+    }
+
+    api_collection.deleteActivity(req,res);
+
+});
+
+
+
+router.post('/api/workitem', function (req, res) {
+
+    if(!req.headers.environment) {
+        res.status(400).end();
+        return;
+    }
+
+    let api_collection = da_apis[req.headers.environment];
+
+    if(!api_collection) {
+        res.status(400).end();
+        return;
+    }
 
     api_collection.postWorkitem(req,res);
 

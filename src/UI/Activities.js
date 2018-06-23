@@ -15,7 +15,7 @@ import Section from './Section';
 import { AutoResizer}  from '@hig/table';
 import '@hig/table/build/index.css';
 import MatrixTable  from './MatrixTable/MatrixTable';
-import CreateActivity from './createactivity';
+import CreateActivity from './submitactivity';
 
 
 type Props = {
@@ -25,7 +25,8 @@ type Props = {
     fetch_activities?: Function,
     fetch_engines?: Function,
     fetch_applications?: Function,
-    submit_activity?: Function
+    submit_activity?: Function,
+    delete_activity?: Function
 };
 
 function extractParams(activity) {
@@ -59,10 +60,12 @@ class ActivityList extends Component<Props> {
         if(!props.activities.loaded && !props.activities.error) {
             props.fetch_activities();
         }
+
+        let currentActivity = props.activities.list.find((a) => a.id ===current_state.currentActivityId);
         return {
             ...current_state,
-            currentActivity: current_state.currentActivity,
-            currentParams : extractParams(props.activities.list.find((a) => a.id ===current_state.currentActivity))
+            currentActivity,
+            currentParams : extractParams(currentActivity)
         };
 
     }
@@ -71,7 +74,13 @@ class ActivityList extends Component<Props> {
         this.setState({mode : 'add'});
     }
 
-    submit_activity() {
+    start_edit_activity() {
+        this.setState({mode : 'edit'});
+    }
+
+    submit_activity(payload) {
+        this.setState({mode : 'list'});
+        this.props.submit_activity(payload);
 
     }
 
@@ -80,15 +89,11 @@ class ActivityList extends Component<Props> {
     }
 
     remove_activity() {
-        //if(this.state.selectedKeys && this.state.selectedKeys.length >= 1) {
-        //    this.props.remove_workitem(this.state.selectedKeys[0]);
-        //}
+        this.props.delete_activity(this.state.currentActivity.id_parts.name);
     }
 
-
-
     onRowChange(keys) {
-        this.setState({ currentActivity: keys.length>=1?keys[0]: null});
+        this.setState({ currentActivityId: keys.length>=1?keys[0]: null});
     }
 
     render() {
@@ -118,7 +123,9 @@ class ActivityList extends Component<Props> {
                                         <ActionBarGroup>
                                             <IconButton icon="add" title="add" type="flat"
                                                         onClick={() => this.start_add_activity()}/>
-                                            <IconButton icon="trash" title="delete" type="flat"
+                                            <IconButton icon="edit" title="edit" type="flat" disabled={!this.state.currentActivity}
+                                                        onClick={() => this.start_edit_activity()}/>
+                                            <IconButton icon="trash" title="delete" type="flat" disabled={!this.state.currentActivity}
                                                         onClick={() => this.remove_activity()}/>
                                         </ActionBarGroup>
                                     </ActionBar>
@@ -136,7 +143,7 @@ class ActivityList extends Component<Props> {
                                                         key: '1',
                                                         dataKey: 'id',
                                                         title: 'ID',
-                                                        width: 250,
+                                                        width: 450,
                                                         accessor: 'id'
                                                     },
                                                     {
@@ -169,58 +176,83 @@ class ActivityList extends Component<Props> {
                             <div>
                                 {this.state.currentActivity &&
                                 <div>
-                                    <h1>{this.state.currentActivity}</h1>
-                                    <h3>Parameters</h3>
-                                    <AutoResizer onResize={this.onResize} height={300}>
-                                        {({width, height}) => (
-                                            <MatrixTable
-                                                width={width}
-                                                height={height}
-                                                columns={[
-                                                    {
-                                                        key: '1',
-                                                        dataKey: 'name',
-                                                        title: 'Name',
-                                                        width: 250
-                                                    },
-                                                    {
-                                                        key: '2',
-                                                        dataKey: 'description',
-                                                        title: 'Description',
-                                                        width: 250
-                                                    },
-                                                    {
-                                                        key: '3',
-                                                        dataKey: 'required',
-                                                        title: 'Required',
-                                                        width: 100
-                                                    },
-                                                    {
-                                                        key: '4',
-                                                        dataKey: 'verb',
-                                                        title: 'Verb',
-                                                        width: 50
-                                                    },
-                                                    {
-                                                        key: '4',
-                                                        dataKey: 'zip',
-                                                        title: 'Zip',
-                                                        width: 50
-                                                    }]}
-                                                data={this.state.currentParams}/>
-                                        )}
-                                    </AutoResizer>
+                                    <h1>{this.state.currentActivityId}</h1>
+
+                                    {this.state.currentActivity.commandLine && this.state.currentActivity.commandLine.length > 0 && this.state.currentActivity.commandLine[0].length > 0 &&
+                                    <div>
+                                        <h3>Command Line</h3>
+                                        <p>{this.state.currentActivity.commandLine}</p>
+                                    </div>
+                                    }
+                                    {this.state.currentActivity.settings &&
+                                    <div>
+                                        <h3>Script</h3>
+                                        <p>{this.state.currentActivity.settings.script}</p>
+                                    </div>
+                                    }
+                                    {this.state.currentActivity.apps && this.state.currentActivity.apps.length > 0 &&
+                                    <div>
+                                        <h3>Bundles</h3>
+                                        <p>{this.state.currentActivity.apps}</p>
+                                    </div>
+                                    }
+
+                                    {this.state.currentParams && this.state.currentParams.length > 0 &&
+                                    <div>
+                                        <h3>Parameters</h3>
+                                        <AutoResizer onResize={this.onResize} height={300}>
+                                            {({width, height}) => (
+                                                <MatrixTable
+                                                    width={width}
+                                                    height={height}
+                                                    columns={[
+                                                        {
+                                                            key: '1',
+                                                            dataKey: 'name',
+                                                            title: 'Name',
+                                                            width: 250
+                                                        },
+                                                        {
+                                                            key: '2',
+                                                            dataKey: 'description',
+                                                            title: 'Description',
+                                                            width: 250
+                                                        },
+                                                        {
+                                                            key: '3',
+                                                            dataKey: 'required',
+                                                            title: 'Required',
+                                                            width: 100
+                                                        },
+                                                        {
+                                                            key: '4',
+                                                            dataKey: 'verb',
+                                                            title: 'Verb',
+                                                            width: 50
+                                                        },
+                                                        {
+                                                            key: '4',
+                                                            dataKey: 'zip',
+                                                            title: 'Zip',
+                                                            width: 50
+                                                        }]}
+                                                    data={this.state.currentParams}/>
+                                            )}
+                                        </AutoResizer>
+                                    </div>
+                                    }
                                 </div>
                                 }
                             </div>
                         </div>
                         }
-                        {this.state.mode === 'add' &&
+                        { (this.state.mode === 'add' || this.state.mode === 'edit') &&
                             <CreateActivity engines={this.props.engines}
                                             applications={this.props.applications}
                                             fetch_engines={this.props.fetch_engines}
                                             fetch_applications={this.props.fetch_applications}
-                                            add_activity={(label, payload) => {this.submit_activity(label, payload);}}
+                                            activity = {this.state.mode === 'edit' && this.state.currentActivity}
+                                            add_activity={(payload) => {this.submit_activity(payload);}}
                                             cancel={() => this.cancel_add_activity()}
                             />
                         }
