@@ -166,14 +166,14 @@ class CreateActivity extends Component<Props> {
         let newparams = [
             ...this.state.parameters,
             {
-                id : "Undefined"
+                id : 'Undefined'
             }
 
         ];
 
         this.setState ({
             parameters : newparams,
-            currentParamId : "Undefined"
+            currentParamId : 'Undefined'
         });
     }
     onRowChange(keys) {
@@ -190,156 +190,152 @@ class CreateActivity extends Component<Props> {
                     </Toast>
                     }
                 </div>
+
                 <div>
-                    {this.props.engines_fetching &&
-                        <ProgressRing size='m'/>
-                    }
-                </div>
-                <div>
-                    {!this.props.engines_fetching &&
-                        <div>
-                            <TextLine>Enter your activity information</TextLine>
-                            <form className="form-group">
-                                <TextField
-                                    id="id"
-                                    label="Activity ID"
-                                    value={this.state.id}
-                                    onChange={(e) => this.onChange('id', e.target.value)}
-                                />
-                                <TextField
-                                    id="alias"
-                                    label="Activity Alias"
-                                    value={this.state.alias}
-                                    onChange={(e) => this.onChange('alias', e.target.value)}
-                                />
-                                <TextField
-                                    id="description"
-                                    label="Activity Description"
-                                    value={this.state.description}
-                                    onChange={(e) => this.onChange('description', e.target.value)}
-                                />
-                                <TextField
-                                    id="command"
-                                    label="Command line"
-                                    value={this.state.commandline}
-                                    onChange={(e) => this.onChange('commandline', e.target.value)}
-                                />
-                                <TextField
-                                    id="script"
-                                    label="Script"
-                                    value={this.state.script}
-                                    onChange={(e) => this.onChange('script', e.target.value)}
-                                />
-                                <div style = {{display : 'flex'}}>
-                                    <Dropdown
-                                        label="Engine"
-                                        options={this.state.engines}
-                                        value={this.state.engine}
-                                        onChange={(value) => {
-                                            this.onChange('engine', value);
-                                            this.onChange('application', '');
-                                        }}
-                                    />
-                                    {this.props.engines.loading &&
-                                        <ProgressRing size='s'/>
-                                    }
-                                </div>
-                                <div style = {{display : 'flex'}}>
-                                    <Dropdown
-                                        label="Application"
-                                        options={this.state.applications}
-                                        value={this.state.application || ''}
-                                        onChange={(value) => this.onChange('application', value)}
-                                    />
-                                    {this.props.applications.loading &&
-                                    <ProgressRing size='s'/>
-                                    }
-                                </div>
-                                <h3>Parameters</h3>
-                                <ActionBar>
-                                    <ActionBarGroup>
-                                        <IconButton icon="add" title="add" type="flat"
-                                                    onClick={() => this.add_parameter()}/>
-                                        <IconButton icon="trash" title="delete" type="flat"
-                                                    onClick={() => this.remove_parameter()}/>
-                                    </ActionBarGroup>
-                                </ActionBar>
-                                <AutoResizer height={300}>
-                                    {({width, height}) => (
-                                        <MatrixTable
-                                            width={width}
-                                            height={height}
-                                            selectable
-                                            selectedRowKeys={this.state.currentParamId?[this.state.currentParamId]:[]}
-                                            onSelectedRowsChange={(keys) => {
-                                                this.onRowChange(keys);
-                                            }}
-                                            columns={[
-                                                {
-                                                    key: '1',
-                                                    dataKey: 'id',
-                                                    title: 'Name',
-                                                    width: 250
-                                                }]}
-                                            data={this.state.parameters}/>
-                                    )}
-                                </AutoResizer>
-                                {this.state.currentParam &&
-                                    <div>
-                                        <div style={{ display: "flex", justifyContent: "space-between"}}>
-                                            <TextField
-                                                id="name"
-                                                label="Name"
-                                                onChange={(e) => this.onParamChange('id',e.target.value)}
-                                                value={this.state.currentParam.id}
-                                            />
-                                            <TextField
-                                                id="description"
-                                                label="Description"
-                                                value={this.state.currentParam.description}
-                                                onChange={(e) => this.onParamChange('description',e.target.value)}
-                                            />
-                                            <TextField
-                                                id="localName"
-                                                label="Local Name"
-                                                value={this.state.currentParam.localName}
-                                                onChange={(e) => this.onParamChange('localName',e.target.value)}
-                                            />
-                                        </div>
-                                        <div style={{ display: "flex", justifyContent: "space-between"}}>
-                                            <Checkbox label="Zip"
-                                                      onChange={(e) => this.onParamChange('zip',e.target.checked)}
-                                                      checked = {this.state.currentParam.zip}/>
-                                            <Checkbox label="On Demand"
-                                                      onChange={(e) => this.onParamChange('ondemand',e.target.checked)}
-                                                      checked = {this.state.currentParam.ondemand}/>
-                                            <Checkbox label="Required"
-                                                      onChange={(e) => this.onParamChange('required',e.target.checked)}
-                                                      checked = {this.state.currentParam.required}/>
-                                            <Dropdown
-                                                label="verb"
-                                                options={[
-                                                    {
-                                                        label : 'get',
-                                                        value : 'get'
-                                                    },
-                                                    {
-                                                        label : 'put',
-                                                        value : 'put'
-                                                    }]}
-                                                onChange={(e) => this.onParamChange('verb', e)}
-                                                value={this.state.currentParam.verb}
-                                            />
-                                        </div>
-                                    </div>
-                                }
-                            </form>
-                            <div>
-                                <Button size="standard" title="Add" width="shrink" onClick={() => this.add_activity()}/>
-                                <Button size="standard" title="Cancel" width="shrink" onClick={() => this.props.cancel()}/>
-                            </div>
+                    <TextLine>Enter your activity information</TextLine>
+                    <form className="form-group">
+                        <TextField
+                            id="id"
+                            label="Activity ID"
+                            value={this.state.id}
+                            onChange={(e) => this.onChange('id', e.target.value)}
+                        />
+                        <TextField
+                            id="alias"
+                            label="Activity Alias"
+                            value={this.state.alias}
+                            onChange={(e) => this.onChange('alias', e.target.value)}
+                        />
+                        <TextField
+                            id="description"
+                            label="Activity Description"
+                            value={this.state.description}
+                            onChange={(e) => this.onChange('description', e.target.value)}
+                        />
+                        <TextField
+                            id="command"
+                            label="Command line"
+                            value={this.state.commandline}
+                            onChange={(e) => this.onChange('commandline', e.target.value)}
+                        />
+                        <TextField
+                            id="script"
+                            label="Script"
+                            value={this.state.script}
+                            onChange={(e) => this.onChange('script', e.target.value)}
+                        />
+                        <div style = {{display : 'flex'}}>
+                            <Dropdown
+                                label="Engine"
+                                options={this.state.engines}
+                                value={this.state.engine}
+                                onChange={(value) => {
+                                    this.onChange('engine', value);
+                                    this.onChange('application', '');
+                                }}
+                            />
+                            {this.props.engines.loading &&
+                                <ProgressRing size='s'/>
+                            }
                         </div>
-                    }
+                        <div style = {{display : 'flex'}}>
+                            <Dropdown
+                                label="Application"
+                                options={this.state.applications}
+                                value={this.state.application || ''}
+                                onChange={(value) => this.onChange('application', value)}
+                            />
+                            {this.props.applications.loading &&
+                            <ProgressRing size='s'/>
+                            }
+                        </div>
+                        <h3>Parameters</h3>
+                        <ActionBar>
+                            <ActionBarGroup>
+                                <IconButton icon="add" title="add" type="flat"
+                                            onClick={() => this.add_parameter()}/>
+                                <IconButton icon="trash" title="delete" type="flat"
+                                            onClick={() => this.remove_parameter()}/>
+                            </ActionBarGroup>
+                        </ActionBar>
+                        <AutoResizer height={300}>
+                            {({width, height}) => (
+                                <MatrixTable
+                                    width={width}
+                                    height={height}
+                                    selectable
+                                    selectedRowKeys={this.state.currentParamId?[this.state.currentParamId]:[]}
+                                    onSelectedRowsChange={(keys) => {
+                                        this.onRowChange(keys);
+                                    }}
+                                    columns={[
+                                        {
+                                            key: '1',
+                                            dataKey: 'id',
+                                            title: 'Name',
+                                            width: 250
+                                        }]}
+                                    data={this.state.parameters}/>
+                            )}
+                        </AutoResizer>
+                        {this.state.currentParam &&
+                            <div>
+                                <div style={{ display: "flex", justifyContent: "space-between"}}>
+                                    <TextField
+                                        id="name"
+                                        label="Name"
+                                        onChange={(e) => this.onParamChange('id',e.target.value)}
+                                        value={this.state.currentParam.id}
+                                    />
+                                    <TextField
+                                        id="description"
+                                        label="Description"
+                                        value={this.state.currentParam.description}
+                                        onChange={(e) => this.onParamChange('description',e.target.value)}
+                                    />
+                                    <TextField
+                                        id="localName"
+                                        label="Local Name"
+                                        value={this.state.currentParam.localName}
+                                        onChange={(e) => this.onParamChange('localName',e.target.value)}
+                                    />
+                                </div>
+                                <div style={{ display: "flex", justifyContent: "space-between"}}>
+                                    <Checkbox label="Zip"
+                                              onChange={(e) => this.onParamChange('zip',e.target.checked)}
+                                              checked = {this.state.currentParam.zip}/>
+                                    <Checkbox label="On Demand"
+                                              onChange={(e) => this.onParamChange('ondemand',e.target.checked)}
+                                              checked = {this.state.currentParam.ondemand}/>
+                                    <Checkbox label="Required"
+                                              onChange={(e) => this.onParamChange('required',e.target.checked)}
+                                              checked = {this.state.currentParam.required}/>
+                                    <Dropdown
+                                        label="verb"
+                                        options={[
+                                            {
+                                                label : 'read',
+                                                value : 'read'
+                                            },
+                                            {
+                                                label : 'get',
+                                                value : 'get'
+                                            },
+                                            {
+                                                label : 'put',
+                                                value : 'put'
+                                            }]}
+                                        onChange={(e) => this.onParamChange('verb', e)}
+                                        value={this.state.currentParam.verb}
+                                    />
+                                </div>
+                            </div>
+                        }
+                    </form>
+                    <div>
+                        <Button size="standard" title="Add" width="shrink" onClick={() => this.add_activity()}/>
+                        <Button size="standard" title="Cancel" width="shrink" onClick={() => this.props.cancel()}/>
+                    </div>
                 </div>
             </div>
         );

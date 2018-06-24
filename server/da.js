@@ -308,8 +308,21 @@ function getworkitemv1(req,res) {
 
     rp(wiUrl).then(function (response) {
         let object = JSON.parse(response);
-        console.log(object);
-        res.status(200).end(response);
+
+        if(object.status !== 'pending') {
+            console.log("need to get the report")
+            rp(object.reportUrl).then(function (report) {
+                object.report = report;
+                console.log(report);
+
+                console.log(JSON.stringify(object));
+
+                res.status(200).end(JSON.stringify(object));
+            });
+        } else {
+            res.status(200).end(response);
+        }
+
     }).catch(function (err) {
         console.log(err.message);
         res.status(400).end(JSON.stringify(err));

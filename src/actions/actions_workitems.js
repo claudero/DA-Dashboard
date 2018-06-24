@@ -91,6 +91,8 @@ function checkWorkitemStatus(dispatch, getState, id) {
             setTimeout(() => {
                 checkWorkitemStatus(dispatch, getState, id);
             },fetch_timeout);
+        } else {
+            console.log(object.report);
         }
 
     }).catch(function (err) {
@@ -151,7 +153,7 @@ export const submit_workitem = (label,client_id, payload) => (dispatch, getState
         if(response.status === 200) {
             return response.json();
         } else {
-            return Promise.reject(new Error('failed to get applications'));
+            return Promise.reject(new Error('failed to post application'));
         }
     }).then(function (status){
         console.log(status);

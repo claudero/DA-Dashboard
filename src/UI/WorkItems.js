@@ -39,25 +39,41 @@ class WorkItems extends Component<Props> {
 
         props.fetch_workitems();
 
+
+        let workitems = props.workitems.map((wi) => {
+
+            let startTime=0;
+            let stats = Object.entries(wi.da_status.stats).map((a,x) => {
+
+
+                if(x===0) {
+                    startTime = Date.parse(a[1]);
+                }
+                return {
+                    name : a[0],
+                    timing : (x===0)? a[1]: ((Date.parse(a[1]) - startTime)/1000)
+                };
+            });
+
+            return {
+                label : wi.label,
+                id : wi.id,
+                activity : wi.payload.activityId,
+                status : wi.da_status.status,
+                report : wi.da_status.report,
+                stats
+            };});
+
+        let currentWorkitem = (current_state.selectedKeys && current_state.selectedKeys.length === 1) ? workitems.find((wi) => wi.id === current_state.selectedKeys[0]): null;
+
         return Object.assign({}, current_state, {
-                workitems : props.workitems.map((wi) => { return {
-                    label : wi.label,
-                    id : wi.id,
-                    activity : wi.payload.activityId,
-                    status : wi.da_status.status
-                };})
+                workitems,
+                currentWorkitem
         });
     }
 
 
-    submit_workitem(label) {
-
-        let payload = {
-            activityId: "3dsMax.HelloWorld+Latest",
-            arguments: {
-            }
-        };
-
+    submit_workitem(label, payload) {
         this.props.submit_workitem(label, this.props.client_id, payload);
         this.setState({mode : 'list'});
     }
@@ -73,28 +89,18 @@ class WorkItems extends Component<Props> {
     remove_workitem() {
         if(this.state.selectedKeys && this.state.selectedKeys.length >= 1) {
             this.props.remove_workitem(this.state.selectedKeys[0]);
+            this.setState({
+                selectedKeys: null,
+                currentWorkitem : null,
+                stats : null
+            });
         }
     }
 
     onSelectionChange = selectedKeys => {
 
-        let startTime =0;
-        let currentWorkitem = (selectedKeys.length !== 1) ? null : this.props.workitems.find((wi) => wi.id === selectedKeys[0]);
-        let stats = (!currentWorkitem) ? [] : Object.entries(currentWorkitem.da_status.stats).map((a,x) => {
-
-            if(x===0) {
-                startTime = Date.parse(a[1]);
-            }
-            return {
-                name : a[0],
-                timing : (x===0)? a[1]: ((Date.parse(a[1]) - startTime)/1000)
-            };
-        });
-
         this.setState({
-            selectedKeys: selectedKeys,
-            currentWorkitem,
-            stats
+            selectedKeys: selectedKeys
         });
     };
 
@@ -114,7 +120,7 @@ class WorkItems extends Component<Props> {
                                                 onClick={() => this.remove_workitem()}/>
                                 </ActionBarGroup>
                             </ActionBar>
-                            <AutoResizer onResize = {this.onResize}  height={600}>
+                            <AutoResizer onResize = {this.onResize}  height={300}>
                                 {({ width, height }) => (
                                     <MatrixTable
                                         width={width}
@@ -157,7 +163,6 @@ class WorkItems extends Component<Props> {
                                     (this.state.currentWorkitem) &&
                                     <div>
                                         <h1>{this.state.currentWorkitem.label || "No description"}</h1>
-                                        <a href={this.state.currentWorkitem.da_status.reportUrl}>Report</a>
                                         <h3>Statistics</h3>
                                         <AutoResizer onResize = {this.onResize}  height={300}>
                                             {({ width, height }) => (
@@ -177,9 +182,10 @@ class WorkItems extends Component<Props> {
                                                             title: 'Timing',
                                                             width: 250
                                                         }]}
-                                                    data={this.state.stats} />
+                                                    data={this.state.currentWorkitem.stats} />
                                             )}
                                         </AutoResizer>
+                                        <pre>{this.state.currentWorkitem.report}</pre>
                                     </div>
                                 }
                             </div>
